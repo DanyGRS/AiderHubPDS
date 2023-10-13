@@ -1,0 +1,128 @@
+﻿@{
+    Layout = "";
+}
+
+<head>
+    <title>Sobre Nós - AiderHub</title>
+    <style>
+        /* Estilo global */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+
+        h1 {
+            color: #FC7828;
+            font-size: 36px;
+            text-align:center;
+        }
+
+        /* Estilos das seções */
+        .about-us, .mission {
+            background-color: #fff;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+            .about-us h2, .mission h2 {
+                color: #FC7828; /* Laranja */
+            }
+
+        /* Estilos do rodapé */
+        footer {
+            background-color: #1B3061;
+            color: #FC7828; /* Laranja */
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* Estilos dos links */
+        a {
+            color: white; /*#FC7828;  Laranja */
+            text-decoration: none;
+        }
+
+        ul{
+            list-style-type: none;
+
+        }
+
+        a:hover {
+            background-color: #FC7828;
+            padding: 4px 8px 4px 8px;
+            border: 2px solid orange;
+            border-radius: 10px;
+        }
+
+        /* Estilo da imagem com sombreamento */
+        .about-image {
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+        }
+
+            .about-image img {
+                width: 100%;
+                max-width: 400px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .about-image p {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                background-color: rgba(0, 0, 0, 0.6);
+                color: #fff;
+                padding: 5px 10px;
+                border-radius: 5px;
+                font-size: 12px;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="background-color: #1B3061; padding: 20px 0; ">
+            <ul class="navbar-nav flex-grow-1 justify-content-start">
+                <li class="nav-item"><a class="nav-link text-white-50" asp-controller="Usuarios" asp-action="PaginaInicial">Voltar</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="justify-content-center">
+        <h1>Sobre Nós</h1>
+    </div>
+    <section class="about-us">
+        <div class="container">
+            <h2>Quem Somos</h2>
+            <p>O AiderHub é uma plataforma inovadora que nasceu da vontade de fazer a diferença. Conectamos voluntários e universitários, proporcionando uma experiência única para ambos.</p>
+            <p>Nossa missão é tornar mais acessível e gratificante o envolvimento dos estudantes em atividades voluntárias e projetos sociais. Ajudamos a transformar o aprendizado em ação.</p>
+        </div>
+    </section>
+    <section class="mission">
+        <div class="container">
+            <h2>Nossa Missão</h2>
+            <p>Estudantes universitários enfrentam uma jornada desafiadora, e as horas complementares muitas vezes são um requisito. No entanto, enxergamos essa necessidade como uma oportunidade de fazer o bem.</p>
+            <p>No AiderHub, acreditamos que cada hora dedicada a uma causa é uma hora que contribui para um mundo melhor. Ao registrar suas atividades voluntárias, os estudantes não apenas atendem aos requisitos de suas faculdades, mas também fortalecem nossa comunidade.</p>
+            <p>Trabalhamos incansavelmente para facilitar a conexão entre voluntários e organizações sem fins lucrativos. Cada ação de ajuda é uma vitória para nós e um passo em direção a um futuro mais solidário e consciente.</p>
+        </div>
+    </section>
+    <section class="about-image">
+        <img src="~/sobrenos.png" alt="Imagem AiderHub">
+    </section>
+    <footer class="border-top footer text-muted">
+        <div class="container" style="font-weight: bold; color: white;">
+            &copy; 2023 - AiderHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">@language.GetKey("Privacy")</a>
+        </div>
+    </footer>
+</body>

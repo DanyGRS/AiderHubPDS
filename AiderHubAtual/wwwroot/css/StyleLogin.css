@@ -1,0 +1,100 @@
+﻿@media (max-width: 768px) {
+    body {
+        background-color: #FF7E0D;
+        background-image: none; /* Remove the gradient */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .form-container {
+        padding-left: 50px;
+        width: 100%;
+    }
+
+    .form-box {
+        padding-left: 50px;
+    }
+
+    .header {
+        padding-left:50px;
+    }
+
+    .header-container {
+        padding-left: 50px;
+    }
+
+    .link {
+        margin-top: 30px;
+        font-weight: bold;
+        text-decoration-line:underline;
+    }
+
+}
+
+body {
+    background-image: linear-gradient(to right, #FF7E0D 50%, transparent 50%);
+}
+
+.form-container {
+    width: 65%; /* Set the width for the form container */
+}
+
+.form-box {
+    width: 100%;
+}
+
+.header {
+    color:white;
+    text-align: left;
+}
+
+.header-container {
+    width: 65%;
+    margin-top:20px;
+    text-align:center;
+}
+
+.header p {
+    margin-bottom: 45px;
+}
+
+.form-group {
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.botao {
+    background-color: #1834E8;
+    color: white;
+    margin-top: 20px;
+    font-size: 20px;
+    border-radius: 10px; /* Adjust the border radius as needed */
+    padding: 12px 12px; /* Adjust the padding for the button size */
+    border: none;
+    width: 100px;
+    
+}
+
+.right-image {
+    
+    object-fit: cover; /* Adjust the object-fit property as needed */
+    z-index: -1; /* Place the image behind other content */
+}
+
+@media (max-width: 768px) {
+    /* Hide the image on screens below 768px width */
+    #responsiveImage {
+        display: none;
+    }
+}
+
+.link {
+    font-weight: bold;
+}
+
+.img-fluid right-image {
+    padding-left:50px;
+}

@@ -3,76 +3,169 @@
 @{
     ViewData["Title"] = "Create";
 }
-@inject LanguageService language
 
-<h1>Create</h1>
 
-<h4>Ong</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="RazaoSocial" class="control-label">corporate name</label>
-                <input asp-for="RazaoSocial" class="form-control" />
-                <span asp-validation-for="RazaoSocial" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NomeFantasia" class="control-label">@language.GetKey("Fantasy Name")</label>
-                <input asp-for="NomeFantasia" class="form-control" />
-                <span asp-validation-for="NomeFantasia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cnpj" class="control-label">@language.GetKey("CNPJ")</label>
-                <input asp-for="Cnpj" class="form-control" />
-                <span asp-validation-for="Cnpj" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label">
-                    @language.GetKey("Email")
-                </label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Senha" class="control-label">@language.GetKey("Password")</label>
-                <input type="password" asp-for="Senha" class="form-control" />
-                <span asp-validation-for="Senha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AssinaturaDigital" class="control-label">@language.GetKey("Digital Signature")</label>
-                <input asp-for="AssinaturaDigital" class="form-control" />
-                <span asp-validation-for="AssinaturaDigital" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefone" class="control-label">@language.GetKey("Telephone")</label>
-                <input asp-for="Telefone" class="form-control" />
-                <span asp-validation-for="Telefone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Endereco" class="control-label">@language.GetKey("Address")</label>
-                <input asp-for="Endereco" class="form-control" />
-                <span asp-validation-for="Endereco" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FotoLogo" class="control-label">@language.GetKey("Photo Logo")</label>
-                <input asp-for="FotoLogo" class="form-control" />
-                <span asp-validation-for="FotoLogo" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                    <label asp-for="Tipo" class="control-label"></label>
-                    <input asp-for="Tipo" class="form-control" />
-                    <span asp-validation-for="Tipo" class="text-danger"></span>
-                </div>*@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AiderHub</title>
+    <link rel="stylesheet" href="~/css/StyleOng.css" />
+
+</head>
+<body>
+    <div class="header">
+        <div class="text-center">
+            <h1>Cadastre-se</h1>
+            <p>ONG</p>
+            <hr />
+        </div>
     </div>
-</div>
-
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <ul class="nav nav-tabs" hidden>
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Dados</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label">
+                                @language.GetKey("Email")
+                            </label>
+                            <input asp-for="Email" class="form-control" id="email" />
+                            <span asp-validation-for="Email" id="emailValidationMessage" class="text-white small"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Senha" class="control-label">@language.GetKey("Password")</label>
+                            <input type="password" asp-for="Senha" id="senha" class="form-control" />
+                            <span asp-validation-for="Senha" id="mensagemSenha" class="text-white small"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">@language.GetKey("Confirm Password")</label>
+                            <input type="password" class="form-control" id="confirmarSenha" />
+                            <span class="text-white" id="mensagemConfSenha" ></span>
+                        </div>
+                        <button id="avancarBtn" class="btn btn-primary">Avançar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="NomeFantasia" class="control-label">@language.GetKey("Fantasy Name")</label>
+                            <input asp-for="NomeFantasia" class="form-control" required/>
+                            <span asp-validation-for="NomeFantasia" class="text-white small"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Cnpj" class="control-label">@language.GetKey("CNPJ")</label>
+                            <input asp-for="Cnpj" class="form-control" id="cnpj" maxlength="18" oninput="validarCNPJ(this)" required/>
+                            <span asp-validation-for="Cnpj" id="cnpjMessage" class="text-white small"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="RazaoSocial" class="control-label">@language.GetKey("Corporate name")</label>
+                            <input asp-for="RazaoSocial" class="form-control" required/>
+                            <span asp-validation-for="RazaoSocial" class="text-white small"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Telefone" class="control-label">@language.GetKey("Telephone")</label>
+                            <input asp-for="Telefone" class="form-control" required/>
+                            <span asp-validation-for="Telefone" class="text-white small"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 negative-margin">
+                        <div class="row">
+                            <div class="form-group col-md-9">
+                                <label asp-for="Endereco" class="control-label">@language.GetKey("Address")</label>
+                                <input asp-for="Endereco" class="form-control" />
+                                <span asp-validation-for="Endereco" class="text-white"></span>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="Numero" class="control-label"></label>
+                                <input asp-for="Numero" class="form-control" />
+                                <span asp-validation-for="Numero" class="text-white"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CEP" class="control-label"></label>
+                            <input asp-for="CEP" class="form-control" />
+                            <span asp-validation-for="CEP" class="text-white"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Complemento" class="control-label"></label>
+                            <input asp-for="Complemento" class="form-control" />
+                            <span asp-validation-for="Complemento" class="text-white"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Bairro" class="control-label"></label>
+                            <input asp-for="Bairro" class="form-control" />
+                            <span asp-validation-for="Bairro" class="text-white"></span>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <label asp-for="Cidade" class="control-label"></label>
+                                <input asp-for="Cidade" class="form-control" />
+                                <span asp-validation-for="Cidade" class="text-white"></span>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label asp-for="UF" class="control-label"></label>
+                                <input asp-for="UF" class="form-control" />
+                                <span asp-validation-for="UF" class="text-white"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="meuBotao col" style="text-align: center;">
+                        <input type="submit" value="Criar" class="botaoCriar" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <p>Já possui cadastro? <a asp-controller="Usuarios" asp-action="LoginPage">Faça login</a></p>
+        </div>
+    </form>
+</body>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+
+        //Botao de avançar da tab
+        document.querySelector("#avancarBtn").addEventListener("click", function (e) {
+            e.preventDefault(); // Impede o envio padrão do formulário
+
+            var email = document.querySelector("#email").value;
+            var senha = document.querySelector("#senha").value;
+            var confirmarSenha = document.querySelector("#confirmarSenha").value;
+            var mensagemSenha = document.getElementById("mensagemConfSenha");
+
+            if (!email || !senha || !confirmarSenha) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            // Verifique se a senha e a confirmação de senha correspondem
+            if (senha !== confirmarSenha) {
+                mensagemConfSenha.textContent = "A senha e a confirmação de senha não coincidem.";
+                return;
+            }
+
+            // Sua lógica para trocar as abas
+            var homeTab = document.querySelector("#home");
+            var profileTab = document.querySelector("#profile");
+
+            homeTab.classList.remove("active");
+            profileTab.classList.add("active");
+
+            // Resto do código de validação, se necessário
+        });
+    </script>
+    <script type="text/javascript" src="~/js/ValidacaoEmaileSenha.js"></script>
 }

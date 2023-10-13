@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AiderHub</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Inicial"> <img src="~/LogoAiderHub(2).png" class="" asp-append-version="true" alt="Logo da AiderHub" /></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Eventos" asp-action="Create">
+                                @language.GetKey("Register Event")
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Eventos" asp-action="IndexOng">@language.GetKey("My Events")</a>
+                        </li>
+                    </ul>
+                    <!-- Language Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Idioma
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="pt-BR" class="dropdown-item" onclick="changeLanguage('pt-BR', 'Português')">Português</a>
+                            <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="en-US" class="dropdown-item" onclick="changeLanguage('en-US', 'Inglês')">English</a>
+                        </div>
+                    </div>
+                    <!-- End Language Dropdown -->
+                    <div class="nav-item">
+                        <div class="botaoSair">
+                            <a class="nav-link text-danger" asp-area="" asp-controller="Home" asp-action="Saindo">@language.GetKey("Exit")</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container" style="font-weight: bold;">
+            &copy; 2023 - AiderHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">@language.GetKey("Privacy")</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Function to change the language, update the button text, and change button color
+        function changeLanguage(culture, language) {
+            document.getElementById("languageDropdown").innerHTML = language;
+            // Store the selected language in a cookie or local storage
+            // Here, we're using local storage
+            localStorage.setItem("selectedLanguage", culture);
+            // Change button color based on selected language
+            if (culture === "pt-BR") {
+                document.getElementById("languageDropdown").style.backgroundColor = "#1b3061";
+            } else if (culture === "en-US") {
+                document.getElementById("languageDropdown").style.backgroundColor = "#FF7E0D";
+            }
+        }
+
+        // Function to retrieve the selected language from cookie or local storage
+        function getSelectedLanguage() {
+            // Retrieve the selected language from local storage
+            var selectedLanguage = localStorage.getItem("selectedLanguage");
+
+            // If a language is stored, update the button text and color
+            if (selectedLanguage) {
+                var languageText = "Idioma"; // Default text
+                if (selectedLanguage === "pt-BR") {
+                    languageText = "Português";
+                    document.getElementById("languageDropdown").style.backgroundColor = "#1b3061";
+                    //document.getElementById("languageDropdown").classList.add("btn-primary");
+                } else if (selectedLanguage === "en-US") {
+                    languageText = "English";
+                    document.getElementById("languageDropdown").style.backgroundColor = "#FF7E0D";
+                    //document.getElementById("languageDropdown").classList.add("btn-warning");
+                }
+                document.getElementById("languageDropdown").innerHTML = languageText;
+            }
+        }
+
+        // Call getSelectedLanguage when the page loads to set the initial button text and color
+        window.onload = getSelectedLanguage;
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<style>
+    .botaoSair {
+        margin-left: 15px;
+    }
+
+</style>

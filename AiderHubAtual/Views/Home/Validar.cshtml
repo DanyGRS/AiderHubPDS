@@ -1,9 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Validação";
+    Layout = "_LayoutVoluntario";
 }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AiderHub</title>
+    <link rel="stylesheet" href="~/css/StyleVon.css" />
 
-<h2>Resultado</h2>
-
-<p>Resultado: @ViewBag.Result</p>
-<p>Coordenadas: @ViewBag.Coordinate</p>
-<p>Distancia: @ViewBag.Distance</p>
+</head>
+<body>
+    <div>
+        <h1 class="text-white text-center"> @ViewBag.Result</h1>
+        <p class="text-white text-center"> @ViewBag.Results</p>
+    </div>
+</body>
+@*<p>Coordenadas: @ViewBag.Coordinate</p>
+    <p>Distancia: @ViewBag.Distance</p>*@

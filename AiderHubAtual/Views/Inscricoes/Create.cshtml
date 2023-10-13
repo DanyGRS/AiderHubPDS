@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+<head>
+    <link rel="stylesheet" href="~/css/StyleEvento.css" />
+</head>
 <h1>Create</h1>
 
 <h4>Inscricao</h4>
@@ -13,14 +15,14 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="idEvento" class="control-label"></label>
-                <input asp-for="idEvento" class="form-control" />
-                <span asp-validation-for="idEvento" class="text-danger"></span>
+                <label asp-for="id_Evento" class="control-label"></label>
+                <input asp-for="id_Evento" class="form-control" />
+                <span asp-validation-for="id_Evento" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="idVoluntario" class="control-label"></label>
-                <input asp-for="idVoluntario" class="form-control" />
-                <span asp-validation-for="idVoluntario" class="text-danger"></span>
+                <label asp-for="id_Voluntario" class="control-label"></label>
+                <input asp-for="id_Voluntario" class="form-control" />
+                <span asp-validation-for="id_Voluntario" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -49,7 +51,7 @@
     </div>
 </div>
 
-<div>
+@*<div>
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
 

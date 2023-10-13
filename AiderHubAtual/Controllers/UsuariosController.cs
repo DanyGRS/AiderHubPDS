@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AiderHubAtual.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AiderHubAtual.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace AiderHubAtual.Controllers
 {
@@ -164,7 +161,7 @@ namespace AiderHubAtual.Controllers
                 string userTipo = ObterTipo(email);
                 HttpContext.Session.SetInt32("IdUser", userId);
                 HttpContext.Session.SetString("IdTipo", userTipo);
-                return RedirectToAction("Index", "Home", new{ id = userId, tipo = userTipo });
+                return RedirectToAction("Index", "Home", new { id = userId, tipo = userTipo });
             }
             else
             {
@@ -179,7 +176,7 @@ namespace AiderHubAtual.Controllers
         {
             // Buscar o registro de usuário com o email informado
             Usuario usuario = _context.Usuarios.FirstOrDefault(u => u.Email == email);
-           
+
             if (usuario != null)
             {
                 // Verificar se a senha fornecida corresponde à senha do usuário
@@ -221,6 +218,14 @@ namespace AiderHubAtual.Controllers
             return " "; // ou outro valor indicando que o userId não foi encontrado
         }
 
+        public IActionResult PaginaInicial()
+        {
+            return View();
+        }        
+        public IActionResult SobreNos()
+        {
+            return View();
+        }
 
         public IActionResult LoginPage()
         {

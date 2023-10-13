@@ -120,17 +120,29 @@
   <data name="Address" xml:space="preserve">
     <value>Endereço</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
   <data name="Check-in" xml:space="preserve">
     <value>Check-in</value>
   </data>
+  <data name="City" xml:space="preserve">
+    <value>Cidade</value>
+  </data>
   <data name="CNPJ" xml:space="preserve">
     <value>CNPJ</value>
+  </data>
+  <data name="Complement" xml:space="preserve">
+    <value>Complemento</value>
+  </data>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>Confirmar Senha</value>
   </data>
   <data name="Convert Addresses" xml:space="preserve">
     <value>Converter Endereços</value>
   </data>
   <data name="Corporate name" xml:space="preserve">
-    <value>Nome Fantasia</value>
+    <value>Razão Social</value>
   </data>
   <data name="CPF" xml:space="preserve">
     <value>CPF</value>
@@ -138,11 +150,20 @@
   <data name="Create" xml:space="preserve">
     <value>Criar</value>
   </data>
+  <data name="Create new Event" xml:space="preserve">
+    <value>Criar Novo Evento</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
   <data name="Date of Birth" xml:space="preserve">
     <value>Data de nascimento</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Excluir</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descrição</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Detalhes</value>
@@ -156,6 +177,9 @@
   <data name="Education" xml:space="preserve">
     <value>Formação</value>
   </data>
+  <data name="End" xml:space="preserve">
+    <value>Encerrar</value>
+  </data>
   <data name="Events" xml:space="preserve">
     <value>Eventos</value>
   </data>
@@ -168,8 +192,14 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Hora</value>
+  </data>
   <data name="Interests" xml:space="preserve">
     <value>Interesses</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Responsável</value>
   </data>
   <data name="My Events" xml:space="preserve">
     <value>Meus Eventos</value>
@@ -180,17 +210,29 @@
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
   </data>
-  <data name="Passoword" xml:space="preserve">
-    <value>Senha</value>
+  <data name="Neighborhood" xml:space="preserve">
+    <value>Bairro</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Número</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Senha</value>
   </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Foto</value>
+  </data>
   <data name="Photo Logo" xml:space="preserve">
     <value>Foto logo</value>
   </data>
+  <data name="Postal Code" xml:space="preserve">
+    <value>CEP</value>
+  </data>
   <data name="Privacy" xml:space="preserve">
     <value>Privacidade</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Inscrever</value>
   </data>
   <data name="Register Event" xml:space="preserve">
     <value>Registrar Evento</value>
@@ -198,10 +240,28 @@
   <data name="Report" xml:space="preserve">
     <value>Relatório</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>UF</value>
+  </data>
+  <data name="Street Address" xml:space="preserve">
+    <value>Logradouro</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
   <data name="Telephone" xml:space="preserve">
     <value>Telefone</value>
   </data>
+  <data name="Unsubscribe" xml:space="preserve">
+    <value>Desinscrever</value>
+  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Bem vindo</value>
+  </data>
+  <data name="Workload" xml:space="preserve">
+    <value>Carga Horária</value>
   </data>
 </root>

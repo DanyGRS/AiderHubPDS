@@ -1,5 +1,3 @@
-using System;
-
 namespace AiderHubAtual.Models
 {
     public class ErrorViewModel

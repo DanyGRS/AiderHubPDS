@@ -2,53 +2,99 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "_LayoutVoluntarioDetails";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Inscricao</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.idEvento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.idEvento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.idVoluntario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.idVoluntario)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tipo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tipo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Confirmacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Confirmacao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataInscricao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataInscricao)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AiderHub</title>
+    <link rel="stylesheet" href="~/css/StyleDetails.css" />
+</head>
+<body>
+
+    <div>
+
+        <div class="header">
+            <div class="header-container">
+                <h1>@language.GetKey("Details")</h1>
+                <h4>@Model.EventosInscricoes.FirstOrDefault().evento.Titulo</h4>
+                <hr />
+            </div>
+        </div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @language.GetKey("Date"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Data_Evento
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Hour"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Hora_Evento
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Address"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Logradouro
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Postal Code"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.CEP
+            </dd>
+            <dt class="col-sm-2">
+                   @language.GetKey("Number"):
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Numero
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("State"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.UF
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Complement"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Complemento
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("City"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Cidade
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Neighborhood"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Bairro
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Workload"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Carga_Horaria
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Description"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Descricao
+            </dd>
+            <dt class="col-sm-2">
+                @language.GetKey("Manager"):
+            </dt>
+            <dd class="col-sm-10">
+                @Model.EventosInscricoes.FirstOrDefault().evento.Responsavel
+            </dd>
+        </dl>
+    </div>
+</body>

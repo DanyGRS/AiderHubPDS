@@ -1,1 +1,0 @@
-Esse documento faz com que a pasta não seja excluída pelo github, quando ela estiver vazia. 

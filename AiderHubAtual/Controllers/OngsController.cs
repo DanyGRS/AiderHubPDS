@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AiderHubAtual.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AiderHubAtual.Models;
 
 namespace AiderHubAtual.Controllers
 {
@@ -53,10 +50,19 @@ namespace AiderHubAtual.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RazaoSocial,NomeFantasia,Cnpj,Email,Senha,AssinaturaDigital,Telefone,Endereco,FotoLogo,Tipo")] Ong ong)
+        public async Task<IActionResult> Create([Bind("Id,RazaoSocial,NomeFantasia,Cnpj,Email,Senha,AssinaturaDigital,Telefone,Endereco,CEP,Numero,UF,Cidade,Complemento,Bairro,FotoLogo,Tipo")] Ong ong)
         {
             if (ModelState.IsValid)
             {
+                // Verificar se já existe um registro com o mesmo e-mail no banco de dados
+                var existingUser = _context.Usuarios.Any(u => u.Email == ong.Email);
+
+                if (existingUser != false)
+                {
+                    ModelState.AddModelError("Email", "Este e-mail já está sendo usado por outro usuário.");
+                    return View(ong);
+                }
+
                 ong.Tipo = "O";
                 _context.Add(ong);
                 await _context.SaveChangesAsync();
@@ -70,13 +76,14 @@ namespace AiderHubAtual.Controllers
                     Status = true
                 };
 
-                //await CreateUsuarioAsync(usuario);
                 var usuarioController = new UsuariosController(_context);
                 await usuarioController.Create(usuario);
 
                 return RedirectToAction("Inicial", "Home");
             }
+
             return View("Inicial", "Home");
+
         }
 
         // GET: Ongs/Edit/5
@@ -100,7 +107,7 @@ namespace AiderHubAtual.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RazaoSocial,NomeFantasia,Cnpj,Email,Senha,AssinaturaDigital,Telefone,Endereco,FotoLogo,Tipo")] Ong ong)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RazaoSocial,NomeFantasia,Cnpj,Email,Senha,AssinaturaDigital,Telefone,Endereco,CEP,Numero,UF,Cidade,Complemento,Bairro,FotoLogo,Tipo")] Ong ong)
         {
             if (id != ong.Id)
             {
@@ -165,3 +172,4 @@ namespace AiderHubAtual.Controllers
         }
     }
 }
+

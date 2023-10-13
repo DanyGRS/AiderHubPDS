@@ -1,58 +1,40 @@
 ﻿@model IEnumerable<AiderHubAtual.Models.Evento>
-    @*@using Microsoft.AspNetCore.Http
-    @using Microsoft.AspNetCore.Mvc.Rendering*@
 
-    @{
-        ViewData["Title"] = "Index";
-        //ViewContext.HttpContext.Session.GetString("IdTipo");
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutVoluntario";
+}
+<head>
+    <link rel="stylesheet" href="~/css/StyleEvento.css" />
+</head>
+
+<div class="card-container">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@item.Titulo</h5>
+                <p class="card-text">@language.GetKey("Date"): @item.Data_Evento.ToString("d") - @item.Hora_Evento</p>
+                <p class="card-text">@language.GetKey("Address"): @item.Logradouro, @item.Numero - @item.Bairro</p>
+                <p class="card-text">@language.GetKey("Workload"): @item.Carga_Horaria</p>
+                <p class="card-text">@language.GetKey("Manager"): @item.Responsavel</p>
+                <a asp-action="DetailsVol" asp-route-id="@item.id_Evento" class="btn btn-primary btn-sm">@language.GetKey("Details")</a>
+                <a asp-action="InscreverEvento" asp-route-id="@item.id_Evento"  class="btn btn-secondary btn-sm">@language.GetKey("Register")</a>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* Espaçamento entre os cards */
     }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.data_Hora)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Endereco)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Carga_Horario)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Descricao)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Responsavel)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.data_Hora)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Endereco)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Carga_Horario)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Descricao)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Responsavel)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id_Evento">Details</a> |
-                        <a asp-action="Inscrever" asp-route-id="@item.Id_Evento" value="@ViewBag.Id">Inscrever</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    .card {
+        width: calc(33.33% - 20px); /* 33.33% para 3 colunas por linha e subtrai o espaço entre eles */
+        /* Adicione outros estilos de card conforme necessário */
+    }
+</style>
 

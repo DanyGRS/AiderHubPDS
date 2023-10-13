@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AiderHubAtual.Models;
+﻿using AiderHubAtual.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using OfficeOpenXml;
+using System.Threading.Tasks;
+using System.IO;
+using System.Collections.Generic;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Runtime.InteropServices;
+using Microsoft.Office.Interop.Excel;
 
 namespace AiderHubAtual.Controllers
 {
@@ -22,7 +26,9 @@ namespace AiderHubAtual.Controllers
         // GET: Eventos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Eventos.ToListAsync());
+            var eventosAtivos = await _context.Eventos.Where(s => s.Status != false).ToListAsync();
+
+            return View(eventosAtivos);
         }
 
 
@@ -30,7 +36,7 @@ namespace AiderHubAtual.Controllers
         {
             int idUser = HttpContext.Session.GetInt32("IdUser") ?? 0;
 
-            // Filtrar as inscrições pelo valor de idVoluntario
+            // Filtrar as inscrições pelo valor de id_Voluntario
             var eventos = await _context.Eventos
                 .Where(e => e.IdOng == idUser)
                 .ToListAsync();
@@ -44,7 +50,6 @@ namespace AiderHubAtual.Controllers
             ViewBag.Mensagem = result;
             return View();
         }
-        // GET: Eventos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,7 +58,7 @@ namespace AiderHubAtual.Controllers
             }
 
             var evento = await _context.Eventos
-                .FirstOrDefaultAsync(m => m.Id_Evento == id);
+                .FirstOrDefaultAsync(m => m.id_Evento == id);
             if (evento == null)
             {
                 return NotFound();
@@ -62,23 +67,37 @@ namespace AiderHubAtual.Controllers
             return View(evento);
         }
 
-        // GET: Eventos/Create
+        public async Task<IActionResult> DetailsVol(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var evento = await _context.Eventos
+                .FirstOrDefaultAsync(m => m.id_Evento == id);
+            if (evento == null)
+            {
+                return NotFound();
+            }
+
+            return View(evento);
+        }
+
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Eventos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id_Evento,data_Hora,Endereco,Carga_Horario,Descricao,Responsavel,Status,IdOng")] Evento evento)
+        public async Task<IActionResult> Create([Bind("id_Evento,Data_Evento,Hora_Evento,Logradouro,CEP,Numero,UF,Complemento,Cidade,Bairro,Carga_Horaria,Descricao,Responsavel,Status,IdOng,Titulo")] Evento evento)
         {
             int idUser = HttpContext.Session.GetInt32("IdUser") ?? 0;
             if (ModelState.IsValid)
             {
                 evento.IdOng = idUser;
+                evento.Status = true;
                 _context.Add(evento);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(IndexOng));
@@ -86,7 +105,7 @@ namespace AiderHubAtual.Controllers
             return View(evento);
         }
 
-        // GET: Eventos/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -102,31 +121,58 @@ namespace AiderHubAtual.Controllers
             return View(evento);
         }
 
-        // POST: Eventos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id_Evento,data_Hora,Endereco,Carga_Horario,Descricao,Responsavel,Status,IdOng")] Evento evento)
+        public async Task<IActionResult> Edit(int id, [Bind("id_Evento,Data_Evento,Hora_Evento,Logradouro,Cep,Numero,Uf,Complemento,Cidade,Bairro,Carga_Horaria,Descricao,Responsavel,Status,IdOng,Titulo")] Evento evento)
         {
             int idUser = HttpContext.Session.GetInt32("IdUser") ?? 0;
-            if (id != evento.Id_Evento)
+            if (id != evento.id_Evento)
             {
                 return NotFound();
             }
+
+            var dadosEvento = _context.Eventos
+                .FirstOrDefault(e => e.id_Evento == id);
+
+            _context.Attach(evento);
 
             if (ModelState.IsValid)
             {
                 try
                 {
                     evento.IdOng = idUser;
-                    evento.Status = true;
-                    _context.Update(evento);
-                    await _context.SaveChangesAsync();
+
+                    // Obtenha a data atual
+                    var dataAtual = DateTime.Now;
+                    var dataEvento = dadosEvento.Data_Evento.Date + dadosEvento.Hora_Evento;
+                    
+                    // Verifique se a data do evento está dentro do prazo de dois dias antes do evento
+                    if (dataEvento.AddDays(-2) >= dataAtual)
+                    {
+                        evento.Status = true;
+                        try
+                        {
+                            _context.Update(evento);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+
+                        }
+                        catch
+                        {
+                            ModelState.AddModelError(string.Empty, "A edição não ocorreu, entre em contato com o suporte!");
+                            return View(evento);
+                        }
+                    }
+                    else
+                    {
+                        // Data do evento está fora do prazo
+                        ModelState.AddModelError(string.Empty, "Você só pode editar o evento até dois dias antes da data do evento.");
+                        return View(evento);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventoExists(evento.Id_Evento))
+                    if (!EventoExists(evento.id_Evento))
                     {
                         return NotFound();
                     }
@@ -135,46 +181,47 @@ namespace AiderHubAtual.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(evento);
         }
 
-        // GET: Eventos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var evento = await _context.Eventos
-                .FirstOrDefaultAsync(m => m.Id_Evento == id);
+        public async Task<IActionResult> DeletarEvento(int id)
+        {
+            var evento = await _context.Eventos.FindAsync(id);
             if (evento == null)
             {
                 return NotFound();
             }
 
-            return View(evento);
-        }
+            try
+            {
+                foreach (var insc in _context.Inscricoes.Where(x => x.id_Evento == evento.id_Evento))
+                {
+                    _context.Inscricoes.Remove(insc);
+                }
+                foreach (var eventoins in _context.EventosInscricoes.Where(x => x.id_Evento == evento.id_Evento))
+                {
+                    _context.EventosInscricoes.Remove(eventoins);
+                }
 
-        // POST: Eventos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var evento = await _context.Eventos.FindAsync(id);
-            _context.Eventos.Remove(evento);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                _context.Eventos.Remove(evento);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Ocorreu um erro ao excluir o evento: {ex.Message}";
+            }
+            return RedirectToAction(nameof(IndexOng));
         }
 
         private bool EventoExists(int id)
         {
-            return _context.Eventos.Any(e => e.Id_Evento == id);
+            return _context.Eventos.Any(e => e.id_Evento == id);
         }
 
-        public async Task<IActionResult> Inscrever(int? id)
+        public async Task<IActionResult> InscreverEvento(int? id)
         {
             if (id == null)
             {
@@ -182,7 +229,7 @@ namespace AiderHubAtual.Controllers
             }
 
             var evento = await _context.Eventos
-                .FirstOrDefaultAsync(m => m.Id_Evento == id);
+                .FirstOrDefaultAsync(m => m.id_Evento == id);
             if (evento == null)
             {
                 return NotFound();
@@ -198,7 +245,7 @@ namespace AiderHubAtual.Controllers
             int idUser = HttpContext.Session.GetInt32("IdUser") ?? 0;
 
             var existingInscricao = await _context.Inscricoes
-            .FirstOrDefaultAsync(i => i.idEvento == id && i.idVoluntario == idUser);
+            .FirstOrDefaultAsync(i => i.id_Evento == id && i.id_Voluntario == idUser);
 
             if (existingInscricao != null)
             {
@@ -209,14 +256,20 @@ namespace AiderHubAtual.Controllers
 
             Inscricao inscricao = new Inscricao
             {
-                idEvento = id,
-                idVoluntario = idUser,
+                id_Evento = id,
+                id_Voluntario = idUser,
                 Status = true,
                 Tipo = "V",
                 Confirmacao = false,
                 DataInscricao = DateTime.Today
             };
-            var inscricaoController = new InscricoesController(_context);
+            //EventoInscricao eventI = new EventoInscricao
+            //{
+            //    id_Evento = id,
+            //    InscricaoId = inscricao.InscricaoId
+            //};
+
+           var inscricaoController = new InscricoesController(_context);
             await inscricaoController.Create(inscricao);
             // Faça o processamento necessário com a inscrição
 
@@ -233,7 +286,7 @@ namespace AiderHubAtual.Controllers
             }
 
             var evento = await _context.Eventos
-                .FirstOrDefaultAsync(m => m.Id_Evento == id);
+                .FirstOrDefaultAsync(m => m.id_Evento == id);
             if (evento == null)
             {
                 return NotFound();
@@ -245,174 +298,178 @@ namespace AiderHubAtual.Controllers
         {
 
             var evento = await _context.Eventos
-            .FirstOrDefaultAsync(e => e.Id_Evento == id);
+            .FirstOrDefaultAsync(e => e.id_Evento == id);
 
-            if ((evento != null) && (evento.Status == false))
-            {
-                ViewBag.Mensagem = "Esse evento já está encerrado!";
-                return RedirectToAction("Inscricao", "Eventos", new { result = ViewBag.Mensagem });
-            }
-            else
-            {
-                evento.Status = false;
-                _context.SaveChanges();
+            evento.Status = false;
+            _context.Update(evento);
+            _context.SaveChanges();
 
-            }
+            Comparecimento(id);
 
-            return RedirectToAction("Index", "Eventos");
+
+            return RedirectToAction("IndexOng", "Eventos");
         }
-        //    //string nomeArquivo = "MacroCertificado.xlsm";
-        //    //string diretorioAtual = AppDomain.CurrentDomain.BaseDirectory;
-        //    //string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
 
-        //    string caminho = "C:\\Users\\PC\\Documents\\AiderHubShippuden\\AiderHubAtual\\Relatorio\\MacroCertificado.xlsm";
+        //Metodo que recebe todos os voluntarios que compareceram
+        public List<Voluntario> Comparecimento(int idEvento)
+        {
+            var voluntariosInscritos = _context.Inscricoes
+                .Where(i => i.id_Evento == idEvento && i.Confirmacao) // Filtrar inscrições para o evento específico
+                .Select(i => i.id_Voluntario)// Selecionar os IDs dos voluntários inscritos
+                .ToList();
 
-        //    Application xlApp = new Application();
+            var voluntariosComparecimento = _context.Voluntarios
+                .Where(v => voluntariosInscritos.Contains(v.Id)) // Filtrar voluntários inscritos
+                .ToList();
 
-        //    if (xlApp == null)
-        //    {
-        //        ViewBag.Mensagem = "Erro ao executar a macro: aplicativo Excel não encontrado.";
-        //        return View("Relatorio");
-        //    }
+            EnviaDados(voluntariosComparecimento, idEvento);
 
-        //    Workbook xlWorkbook = xlApp.Workbooks.Open(caminho, ReadOnly: false);
+            return voluntariosComparecimento; // retornou os voluntarios que confirmaram a incricao
+        }
 
-        //    try
-        //    {
-        //        xlApp.Visible = false;
-        //        xlApp.Run("GerarCertificado");
-        //    }
-        //    catch (System.Exception)
-        //    {
-        //        ViewBag.Mensagem = "Erro ao executar a macro.";
-        //        return View("Relatorio");
-        //    }
-
-        //    xlWorkbook.Close(false);
-        //    xlApp.Application.Quit();
-        //    xlApp.Quit();
+        private void EnviaDados(List<Voluntario> voluntarios, int idEvento)
+        {
+            List<Relatorio> relatorios = new List<Relatorio>();//relatórios a serem criados
+            var evento = _context.Eventos.FirstOrDefault(e => e.id_Evento == idEvento); //qual foi o evento
+            var ong = _context.Ongs.FirstOrDefault(o => o.Id == evento.IdOng); // a ong que realizou o evento
 
 
-        //    ViewBag.Mensagem = "Arquivo gerado com sucesso!";
-        //    return View("Relatorio");
-        //}
+            foreach (var cadaInscrito in voluntarios)
+            {
+                Relatorio relatorio = new Relatorio();
+                relatorio.NomeVoluntario = cadaInscrito.Nome;//testar com mais voluntarios para ver se os dados permanecem
+                relatorio.NomeONG = ong.NomeFantasia;
+                relatorio.DataEvento = evento.Data_Evento;
+                relatorio.CargaHoraria = evento.Carga_Horaria;
+                relatorio.Email = cadaInscrito.Email;
+
+                relatorios.Add(relatorio);
+            }
+
+            LimpaExcelRel(relatorios.Count());
+            PreencheExcel(relatorios);
+
+        }
+
+        //Metodo para limpar o excel
+        protected void LimpaExcelRel(int quantidade)
+        {
+            string nomeArquivo = "MacroCertificado.xlsm";
+            string diretorioAtual = Directory.GetCurrentDirectory();
+            string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
+
+            // Inicialize o aplicativo do Excel
+            Microsoft.Office.Interop.Excel.Application excelApp = new Excel.Application();
+            excelApp.Visible = false; // Você pode torná-lo visível se desejar
+
+            // Abra o arquivo Excel
+            Excel.Workbook workbook = excelApp.Workbooks.Open(caminho);
+
+            // Acesse a primeira planilha (índice 1)
+            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[1];
+
+            int maxRows = 2; // Número máximo de linhas
+            int maxColumns = quantidade; // Número máximo de colunas (coluna J é a 10ª)
+
+            // Limpar o conteúdo das células até a coluna J e 15 linhas
+            for (int row = 1; row <= maxRows; row++) // verifique se apaga os cabeçalhos
+            {
+                for (int col = 1; col <= maxColumns; col++)
+                {
+                    ((Excel.Range)worksheet.Cells[row, col]).ClearContents();
+                }
+            }
+
+            // Salvar e fechar o arquivo Excel
+            workbook.Save();
+            workbook.Close();
+            excelApp.Quit();
+
+            Marshal.ReleaseComObject(workbook);
+            Marshal.ReleaseComObject(excelApp);
 
 
+        }
 
-        //public async Task<IActionResult> EncerrarAsync(int id)
-        //{
-        //    //string nomeArquivo = "MacroCertificado.xlsm";
-        //    //string diretorioAtual = AppDomain.CurrentDomain.BaseDirectory;
-        //    //string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
+        public void PreencheExcel(List<Relatorio> relatorios)
+        {
+            // Salve o arquivo Excel
+            // Salve o arquivo Excel
+            string nomeArquivo = "MacroCertificado.xlsm";
+            string diretorioAtual = Directory.GetCurrentDirectory();
+            string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
 
-        //    var evento = await _context.Eventos
-        //    .FirstOrDefaultAsync(e => e.Id_Evento == id);
+            // Inicialize o aplicativo do Excel
+            Excel.Application excelApp = new Excel.Application();
+            excelApp.Visible = false;
 
-        //    if ((evento != null) && (evento.Status == false))
-        //    {
-        //        // Já existe uma inscrição com os mesmos valores, faça o tratamento necessário
-        //        ViewBag.Mensagem = "Esse evento já está encerrado!";
-        //        return RedirectToAction("Index", "Eventos"); // Redireciona para a página desejada
-        //    }
-        //}
-        //    string caminho = "C:\\Users\\PC\\Documents\\AiderHubShippuden\\AiderHubAtual\\Relatorio\\MacroCertificado.xlsm";
+            Excel.Workbook workbook = excelApp.Workbooks.Open(caminho);
 
-        //    Application xlApp = new Application();
-        //    Workbook xlWorkbook = null;
-        //    Worksheet ws = null;
+            // Obtenha a planilha existente pelo nome
+            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets["relatorio"];
 
-        //    try
-        //    {
-        //        xlWorkbook = xlApp.Workbooks.Open(caminho);
-        //        ws = (Worksheet)xlApp.ActiveSheet;
+            worksheet.Cells[1, 1].Value = "nome_voluntario";
+            worksheet.Cells[1, 2].Value = "nome_ong";
+            worksheet.Cells[1, 3].Value = "data_evento";
+            worksheet.Cells[1, 4].Value = "carga_horaria";
+            worksheet.Cells[1, 5].Value = "email";
 
-        //        List<InscricaoData> inscricoes = ObterInscricoesPorEvento(id);
+            // Adicione os dados aos campos correspondentes
+            int linha = 2; // Começa na linha 2 após os cabeçalhos
+            foreach (var relatorio in relatorios)
+            {
+                worksheet.Cells[linha, 1].Value = relatorio.NomeVoluntario;
+                worksheet.Cells[linha, 2].Value = relatorio.NomeONG;
+                worksheet.Cells[linha, 3].Value = relatorio.DataEvento;
+                worksheet.Cells[linha, 4].Value = relatorio.CargaHoraria.Hours;//arrumar o tipo de dado da carga horaria
+                worksheet.Cells[linha, 5].Value = relatorio.Email;//arrumar o tipo de dado da carga horaria
+                linha++;
+            }
 
-        //        int startRow = 2; // Começando na linha 2 (exemplo)
+            // Salve o arquivo Excel
+            workbook.Save();
+            workbook.Close();
+            // Feche o aplicativo do Excel
+            excelApp.Quit();
 
-        //        for (int i = 0; i < inscricoes.Count; i++)
-        //        {
-        //            var inscricao = inscricoes[i];
+            // Libere os objetos COM
+            Marshal.ReleaseComObject(worksheet);
+            Marshal.ReleaseComObject(workbook);
+            Marshal.ReleaseComObject(excelApp);
 
-        //            ws.Cells[startRow + i, 1] = inscricao.idEvento;
-        //            ws.Cells[startRow + i, 2] = inscricao.idVoluntario;
-        //            ws.Cells[startRow + i, 3] = inscricao.NomeVoluntario;
-        //            ws.Cells[startRow + i, 4] = inscricao.CargaHoraria;
-        //            ws.Cells[startRow + i, 5] = inscricao.DataEvento;
-        //            ws.Cells[startRow + i, 6] = inscricao.Ong;
-        //        }
+            GeraCertificados(caminho);
+        }
 
-        //        xlWorkbook.Save();
+        protected void GeraCertificados(string caminho)
+        {
+            Application xlApp = new Application();
 
-        //        try
-        //        {
-        //            xlApp.Visible = false;
-        //            xlApp.Run("GerarCertificado");
-        //        }
-        //        catch (Exception)
-        //        {
-        //            ViewBag.Mensagem = "Erro ao executar a macro.";
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ViewBag.Mensagem = "Erro ao abrir o arquivo da planilha: " + ex.Message;
-        //    }
-        //    finally
-        //    {
-        //        if (ws != null)
-        //        {
-        //            Marshal.ReleaseComObject(ws);
-        //        }
-        //        if (xlWorkbook != null)
-        //        {
-        //            xlWorkbook.Close();
-        //            Marshal.ReleaseComObject(xlWorkbook);
-        //        }
-        //        if (xlApp != null)
-        //        {
-        //            xlApp.Quit();
-        //            Marshal.ReleaseComObject(xlApp);
-        //        }
-        //    }
-        //    return RedirectToAction("Inicial", "Home");
-        //}
+            if (xlApp == null)
+            {
+                ViewBag.Mensagem = "Erro ao executar a macro: aplicativo Excel não encontrado.";
+                //return View("Relatorio");
+            }
 
-        //public List<InscricaoData> ObterInscricoesPorEvento(int id)
-        //{
-        //    List<InscricaoData> inscricoes = new List<InscricaoData>();
+            Workbook xlWorkbook = xlApp.Workbooks.Open(caminho, ReadOnly: false);
 
-        //    var evento = _context.Eventos.FirstOrDefault(e => e.Id_Evento == id);
-        //    if (evento != null)
-        //    {
-        //        var inscricoesEvento = _context.Inscricoes.Where(i => i.idEvento == id).ToList();
+            try
+            {
+                xlApp.Visible = false;
+                xlApp.Run("GerarCertificado");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Mensagem = "Erro ao executar a macro.";
+                //return View("Relatorio");
+            }
 
-        //        foreach (var inscricaoEvento in inscricoesEvento)
-        //        {
-        //            var voluntario = _context.Voluntarios.FirstOrDefault(v => v.Id == inscricaoEvento.idVoluntario);
-        //            if (voluntario != null)
-        //            {
-        //                var ong = _context.Ongs.FirstOrDefault(o => o.Id == evento.IdOng);
-        //                if (ong != null)
-        //                {
-        //                    var inscricao = new InscricaoData
-        //                    {
-        //                        idEvento = id,
-        //                        idVoluntario = inscricaoEvento.idVoluntario,
-        //                        NomeVoluntario = voluntario.Nome,
-        //                        CargaHoraria = evento.Carga_Horario,
-        //                        DataEvento = evento.data_Hora,
-        //                        Ong = ong.NomeFantasia
-        //                    };
+            xlWorkbook.Close(false);
+            xlApp.Application.Quit();
+            xlApp.Quit();
 
-        //                    inscricoes.Add(inscricao);
-        //                }
-        //            }
-        //        }
 
-        //        return inscricoes;
-        //    }
-        //    return inscricoes;
-        //}
+            ViewBag.Mensagem = "Arquivo gerado com sucesso!";
+            //return View("Relatorio");
+        }
     }
 }

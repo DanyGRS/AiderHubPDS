@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AiderHubAtual.Models
 {
@@ -15,15 +10,15 @@ namespace AiderHubAtual.Models
         [Column("email")]
         public string Email { get; set; }
         [Column("senha")]
-        public string Senha { get; set;}
+        public string Senha { get; set; }
         [Column("status")]
-        public bool Status { get; set;}
+        public bool Status { get; set; }
         [Column("tipo")]
         public string Tipo { get; set; }
 
         public Usuario() { }
 
-        public Usuario(int id, string email, string  senha, bool status, string tipo)
+        public Usuario(int id, string email, string senha, bool status, string tipo)
         {
             Id = id;
             Email = email;

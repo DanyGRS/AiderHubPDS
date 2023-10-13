@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AiderHubAtual.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AiderHubAtual.Models;
 
 namespace AiderHubAtual.Controllers
 {
@@ -47,13 +45,22 @@ namespace AiderHubAtual.Controllers
         {
             return View();
         }
-     
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Foto,DataNascimento,Cpf,Email,Senha,Telefone,Endereco,Formacao,Sobre,Interesses,Tipo")] Voluntario voluntario)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Foto,DataNascimento,Cpf,Email,Senha,Telefone,Endereco,Cep,Numero,Uf,Cidade,Bairro,Complemento,Formacao,Sobre,Interesses,Tipo")] Voluntario voluntario)
         {
             if (ModelState.IsValid)
             {
+                var existingUser = _context.Usuarios.Any(u => u.Email == voluntario.Email);
+
+                if (existingUser != false)
+                {
+                    ModelState.AddModelError("Email", "Este e-mail já está sendo usado por outro usuário.");
+                    return View(voluntario);
+                }
+
+                ValidacaoController.ValidateCPF(voluntario.Cpf);
                 voluntario.Tipo = "V";
                 _context.Add(voluntario);
                 await _context.SaveChangesAsync();
@@ -104,7 +111,7 @@ namespace AiderHubAtual.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Foto,DataNascimento,Cpf,Email,Senha,Telefone,Endereco,Formacao,Sobre,Interesses,Tipo")] Voluntario voluntario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Foto,DataNascimento,Cpf,Email,Senha,Telefone,Endereco,Cep,Numero,Uf,Cidade,Bairro,Complemento,Formacao,Sobre,Interesses,Tipo")] Voluntario voluntario)
         {
             if (id != voluntario.Id)
             {

@@ -1,0 +1,125 @@
+﻿@media (max-width: 768px) {
+    body {
+        background-color: #f5efef;
+        background-image: none; /* Remove the gradient */
+
+    }
+}
+
+@media (max-width: 768px) {
+
+    .form-container {
+        padding-left: 50px;
+        width: 100%;
+    }
+
+    .form-box {
+        padding-left: 50px;
+    }
+
+    .header {
+        padding-left: 50px;
+    }
+
+    .header-container {
+        padding-left: 110px;
+    }
+
+    .link {
+        margin-top: 30px;
+        font-weight: bold;
+        text-decoration-line: underline;
+    }
+}
+
+body {
+    background-image: linear-gradient(to right, #f5efef 50%, transparent), url('../volunteer2.jpg');
+    background-size: cover; /* Adjust the sizing as needed */
+    background-repeat: no-repeat;
+    background-attachment: scroll; /* This keeps the image fixed while scrolling */
+    background-position: bottom, center;
+}
+
+.title {
+    color: white;
+    font-weight: bold;
+}
+
+.form-container {
+    width: 65%; /* Set the width for the form container */
+}
+
+.form-box {
+    width: 100%;
+}
+
+.header {
+    color: white;
+    text-align: left;
+}
+
+.header-container {
+    width:40%;
+    margin-top: 20px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    /* Hide the image on screens below 768px width */
+    #responsiveImage {
+        display: none;
+    }
+}
+
+.img-fluid right-image {
+    padding-left: 50px;
+}
+
+.image-container {
+    text-align: right; /* Align the content to the right */
+    margin-left: 50px; /* Push the content even more to the right */
+}
+
+.right-image {
+    max-width: 100%; /* Ensure the image doesn't overflow the container */
+}
+
+
+@media (max-width: 768px) {
+    .image-container {
+        text-align: right; /* Align the content to the right */
+        margin-left: 50px; /* Push the content even more to the right */
+    }
+}
+
+.links {
+    font-weight: bold;
+    color:black;
+}
+
+.link {
+    color: #FF7E0D;
+    text-decoration: none; /* Remove underlines from links (if needed) */
+}
+
+    .link:hover {
+        /* Optionally, you can set a different color when hovering over the links */
+        color: #FF5E00; /* Use an 80% opaque white for a subtle hover effect */
+    }
+
+.header hr {
+    color: #FF7E0D;
+    height: 3px; /* Adjust the height as needed */
+    background-color: #FF7E0D; /* Change the color if desired */
+    border: none; /* Remove the default border */
+    margin-top: 10px; /* Adjust the margin as needed */
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+h1{
+    color:black;
+}
+
+h4{
+    color:black;
+}

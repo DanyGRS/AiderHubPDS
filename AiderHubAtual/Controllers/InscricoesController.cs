@@ -21,10 +21,18 @@ namespace AiderHubAtual.Controllers
         {
             int idUser = HttpContext.Session.GetInt32("IdUser") ?? 0;
 
-            // Filtrar as inscrições pelo valor de idVoluntario
+            // Filtrar as inscrições pelo valor de id_Voluntario
+            // Parei Aqui
             var inscricoes = await _context.Inscricoes
-                .Where(i => i.idVoluntario == idUser)
+                .Where(i => i.id_Voluntario == idUser)
+                .Include(i => i.EventosInscricoes)
+                .ThenInclude(navigationPropertyPath: p => p.evento)
                 .ToListAsync();
+    
+                //.ThenInclude(o => o.evento)
+
+             //   .Include(i => i.Eventos).ToListAsync();
+
 
             return View(inscricoes);
         }
@@ -39,7 +47,9 @@ namespace AiderHubAtual.Controllers
             }
 
             var inscricao = await _context.Inscricoes
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(i => i.EventosInscricoes)
+                .ThenInclude(navigationPropertyPath: p => p.evento)
+                .FirstOrDefaultAsync(m => m.InscricaoId == id);
             if (inscricao == null)
             {
                 return NotFound();
@@ -59,11 +69,19 @@ namespace AiderHubAtual.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,idEvento,idVoluntario,Status,Tipo,Confirmacao,DataInscricao")] Inscricao inscricao)
+        public async Task<IActionResult> Create([Bind("InscricaoId,id_Evento,id_Voluntario,Status,Tipo,Confirmacao,DataInscricao")] Inscricao inscricao)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(inscricao);
+                await _context.SaveChangesAsync();
+
+                EventoInscricao ins = new EventoInscricao
+                {
+                    id_Evento = (int)inscricao.id_Evento,
+                    InscricaoId = inscricao.InscricaoId,
+                };
+                _context.Add(ins);
                 await _context.SaveChangesAsync();
             }
             return View(inscricao);
@@ -87,10 +105,10 @@ namespace AiderHubAtual.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,idEvento,idVoluntario,Status,Tipo,Confirmacao,DataInscricao")] Inscricao inscricao)
+        public async Task<IActionResult> Edit(int id, [Bind("InscricaoId,id_Evento,id_Voluntario,Status,Tipo,Confirmacao,DataInscricao")] Inscricao inscricao)
         {
 
-            if (id != inscricao.Id)
+            if (id != inscricao.InscricaoId)
             {
                 return NotFound();
             }
@@ -104,7 +122,7 @@ namespace AiderHubAtual.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InscricaoExists(inscricao.Id))
+                    if (!InscricaoExists(inscricao.InscricaoId))
                     {
                         return NotFound();
                     }
@@ -118,30 +136,23 @@ namespace AiderHubAtual.Controllers
             return View(inscricao);
         }
 
-        // GET: Inscricoes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        public async Task<IActionResult> DeletarInscricao(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var inscricao = await _context.Inscricoes
-                .FirstOrDefaultAsync(m => m.Id == id);
+                     
+            var inscricao = await _context.Inscricoes.FindAsync(id);
             if (inscricao == null)
             {
                 return NotFound();
             }
-
-            return View(inscricao);
-        }
-
-        // POST: Inscricoes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var inscricao = await _context.Inscricoes.FindAsync(id);
+            foreach (var eventoins in _context.EventosInscricoes.Where(x => x.id_Evento == inscricao.id_Evento))
+            {
+                _context.EventosInscricoes.Remove(eventoins);
+            }
             _context.Inscricoes.Remove(inscricao);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -149,7 +160,9 @@ namespace AiderHubAtual.Controllers
 
         private bool InscricaoExists(int id)
         {
-            return _context.Inscricoes.Any(e => e.Id == id);
+            return _context.Inscricoes.Any(e => e.InscricaoId == id);
         }
+
+
     }
 }

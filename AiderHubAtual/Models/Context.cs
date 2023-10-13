@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 
 namespace AiderHubAtual.Models
@@ -10,8 +6,8 @@ namespace AiderHubAtual.Models
     public class Context : DbContext
     {
         public Context(DbContextOptions<Context> options) : base(options)
-        { 
-            
+        {
+
         }
         public DbSet<Evento> Eventos { get; set; }
         public DbSet<Inscricao> Inscricoes { get; set; }
@@ -19,6 +15,7 @@ namespace AiderHubAtual.Models
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Voluntario> Voluntarios { get; set; }
         public DbSet<Relatorio> Relatorios { get; set; }
+        public DbSet<EventoInscricao> EventosInscricoes { get; set; }
         //public DbSet<Calendario> Calendarios { get; set; }
     }
 }

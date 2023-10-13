@@ -1,12 +1,20 @@
 ﻿@model AiderHubAtual.Controllers.HomeController
 
-@inject LanguageService language
+
+
+
 
 @if ((bool)ViewBag.VoluntarioLogado == true)
 {
+    <head>
+        <link rel="stylesheet" href="~/css/StyleEvento.css" />
+    </head>
     Layout = "_LayoutVoluntario";
 }
 else
 {
+    <head>
+        <link rel="stylesheet" href="~/css/StyleHome.css" />
+    </head>
     Layout = "_LayoutOng";
 }

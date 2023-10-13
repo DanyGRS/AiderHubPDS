@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,11 +10,11 @@ namespace AiderHubAtual.Models
     {
         [Key]
         [Column("id_inscricao")]
-        public int Id { get; set; }
+        public int InscricaoId { get; set; }
         [Column("id_evento")]
-        public int idEvento { get; set; }
+        public int? id_Evento { get; set; }
         [Column("id_voluntario")]
-        public int idVoluntario { get; set; }
+        public int id_Voluntario { get; set; }
         [Column("status")]
         public bool Status { get; set; }
         [Column("tipo")]
@@ -24,20 +22,23 @@ namespace AiderHubAtual.Models
         [Column("confirmacao")]
         public bool Confirmacao { get; set; }
 
-        [Column("datainscricao")]
+        [Column("data_inscricao")]
         public DateTime DataInscricao { get; set; }
 
+        public virtual ICollection<EventoInscricao> EventosInscricoes { get; set; } = new List<EventoInscricao>();
         public Inscricao() { }
 
-        public Inscricao(int id_inscricao, int id_evento, int id_voluntario, bool status, string tipo, bool confirmacao, DateTime datainscricao)
+        public Inscricao(int id_inscricao, int id_evento, int id_voluntario, bool status, string tipo, bool confirmacao, DateTime data_inscricao)
         {
-            Id = id_inscricao;
-            idEvento = id_evento;
-            idVoluntario = id_voluntario;
+            InscricaoId = id_inscricao;
+            id_Evento = id_evento;
+            id_Voluntario = id_voluntario;
             Status = status;
             Tipo = tipo;
             Confirmacao = confirmacao;
-            DataInscricao = datainscricao;
+            DataInscricao = data_inscricao;
         }
+
+
     }
 }
