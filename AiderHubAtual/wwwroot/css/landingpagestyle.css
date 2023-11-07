@@ -1,0 +1,59 @@
+﻿body {
+    background-color: #EC7208;
+}
+
+.imgBox img {
+    max-width: 100%;
+    height: auto;
+}
+.circle {
+    width: 220vh;
+    height: 185vh;
+    background-color: #173F9B;
+    border-radius: 50%;
+    position: absolute;
+    top: -50vh;
+    right: -50vh;
+    z-index: -1;
+}
+
+@media (max-width: 768px) {
+    .circle {
+        height: 0vh; /* Adjust the height for smaller screens */
+    }
+    body {
+        background-color: #173F9B;
+    }
+}
+
+@media (min-width: 970px) {
+
+    .circle {
+        width: 200vh;
+        height: 195vh;
+    }
+}
+
+.textBox {
+    color: white;
+}
+
+
+.blue-text {
+    color: blue;
+}
+
+.orange-text {
+    color: blue;
+}
+
+@media (max-width: 992px) {
+
+    .blue-text {
+        color: orange;
+    }
+
+    .orange-text {
+        color: orange;
+    }
+}
