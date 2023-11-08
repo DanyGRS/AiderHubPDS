@@ -1,5 +1,6 @@
 ﻿@{
-    Layout = "_LayoutVoluntario";
+    ViewData["Title"] = "Validação";
+    Layout = "_LayoutLogin";
 }
 
 <head>
@@ -13,15 +14,11 @@
 <body>
 
     <div class="content">
-        @if (ViewBag.Mensagem != null)
-        {
-        <div>
-            <h1>@ViewBag.Mensagem</h1>
-        </div>
-        }
+        <h1 class="text-white text-center"> @ViewBag.Result</h1>
+        <p class="text-white text-center"> @ViewBag.Results</p>
     </div>
-    <div class="imgBox2">
-        <img src="~/inscrita.png">
+    <div class="imgBox">
+        <img src="~/invalido.png">
     </div>
     <div class="circle"></div>
 

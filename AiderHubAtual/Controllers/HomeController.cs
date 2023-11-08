@@ -135,7 +135,8 @@ namespace AiderHubAtual.Controllers
 
             if (distanceInMeters <= 4000)
             {
-                ViewBag.resultado = "DENTRO DO RAIO, CHECK-IN REALIZADO COM SUCESSO!";
+                ViewBag.resultado = "Check-In Confirmado!";
+                ViewBag.resultados = "O seu check-in para o evento foi realizado com sucesso.";
                 //ViewBag.coordenadas = $"{parsedDeviceLatitude}, {parsedDeviceLongitude}";
                 //ViewBag.distancia = distanceInMeters;
 
@@ -155,22 +156,30 @@ namespace AiderHubAtual.Controllers
                     }
                 }
 
-                return RedirectToAction("Validar", new { result = ViewBag.resultado});
+                return RedirectToAction("Validar", new { result = ViewBag.resultado, results = ViewBag.resultados});
             }
             else
             {
-                ViewBag.resultado = "FORA DO RAIO, CHECK-IN INVÁLIDO!";
+                ViewBag.resultado = "CHECK-IN INVÁLIDO!";
                 ViewBag.resultados = "Tente novamente quando estiver no local do evento";
 
-                return RedirectToAction("Validar", new { result = ViewBag.resultado, results = ViewBag.resultados }) ;
+                return RedirectToAction("Invalido", new { result = ViewBag.resultado, results = ViewBag.resultados});
             }
         }
 
-        public ActionResult Validar(string result, string coordinate, double distance)
+        public ActionResult Validar(string result, string results)
         {
             ViewBag.Result = result;
-            ViewBag.Coordinate = coordinate;
-            ViewBag.Distance = distance;
+            ViewBag.Results = results;
+   
+            return View();
+        }
+
+        public ActionResult Invalido(string result, string results)
+        {
+            ViewBag.Result = result;
+            ViewBag.Results = results;
+    
             return View();
         }
 
@@ -199,6 +208,5 @@ namespace AiderHubAtual.Controllers
             // Redireciona para a página de login
             return RedirectToAction("LoginPage", "Usuarios");
         }
-
     }
 }

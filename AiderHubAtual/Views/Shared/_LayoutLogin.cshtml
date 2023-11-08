@@ -47,8 +47,8 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted" style="background-color: #FFFFFF;">
-        <div class="container" style="font-weight: bold; ">
+    <footer class="footer text-muted">
+        <div class="container">
             &copy; 2023 - AiderHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">@language.GetKey("Privacy")</a>
         </div>
     </footer>
@@ -107,5 +107,24 @@
         padding: 4px 8px 4px 8px;
         border: 2px solid orange;
         border-radius: 10px;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .content {
+        flex: 1;
+    }
+
+    .footer {
+        flex-shrink: 0;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        border-top: 1px solid #dee2e6;
+        text-align: center;
+        padding: 10px 0;
     }
 </style>

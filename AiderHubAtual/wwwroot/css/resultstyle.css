@@ -1,0 +1,48 @@
+﻿body {
+    background-color: #EC7208;
+}
+
+.content {
+    text-align: center;
+    color: white;
+}
+
+.imgBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Ajuste conforme necessário */
+}
+
+    .imgBox img {
+        max-width: 100%;
+        height: auto;
+        z-index: 1
+    }
+
+.imgBox2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Ajuste conforme necessário */
+}
+
+    .imgBox2 img {
+        max-width: 100%;
+        padding-left: 15px;
+        height: auto;
+        z-index: 1
+    }
+
+.circle {
+    width: 250px; /* Ajuste o tamanho do círculo conforme necessário */
+    height: 251px; /* Ajuste o tamanho do círculo conforme necessário */
+    background-color: blue;
+    border-radius: 50%;
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0; /* Define um valor de z-index menor para colocar o círculo atrás da imagem */
+}
+
