@@ -10,10 +10,13 @@ namespace AiderHubAtual.Controllers
     public class VoluntariosController : Controller
     {
         private readonly Context _context;
+        private readonly PasswordHasherService _passwordHasher;
 
-        public VoluntariosController(Context context)
+
+        public VoluntariosController(Context context, PasswordHasherService password)
         {
             _context = context;
+            _passwordHasher = password;
         }
 
         // GET: Voluntarios
@@ -65,18 +68,19 @@ namespace AiderHubAtual.Controllers
                 _context.Add(voluntario);
                 await _context.SaveChangesAsync();
 
+                var senhaCriptografada = _passwordHasher.HashPassword(voluntario.Senha);
 
                 Usuario usuario = new Usuario
                 {
                     Id = voluntario.Id,
                     Email = voluntario.Email,
-                    Senha = voluntario.Senha,
+                    Senha = senhaCriptografada,
                     Tipo = "V",
                     Status = true
                 };
 
                 //await CreateUsuarioAsync(usuario);
-                var usuarioController = new UsuariosController(_context);
+                var usuarioController = new UsuariosController(_context, _passwordHasher);
                 await usuarioController.Create(usuario);
 
                 return RedirectToAction("Inicial", "Home");

@@ -1,20 +1,18 @@
 ﻿@model AiderHubAtual.Controllers.HomeController
 
-
-
-
-
 @if ((bool)ViewBag.VoluntarioLogado == true)
 {
-    <head>
-        <link rel="stylesheet" href="~/css/StyleEvento.css" />
-    </head>
+<head>
+    <link rel="stylesheet" href="~/css/StyleHome.css">
+    
+</head>
     Layout = "_LayoutVoluntario";
 }
 else
 {
-    <head>
-        <link rel="stylesheet" href="~/css/StyleHome.css" />
-    </head>
+<head>
+    <link rel="stylesheet" href="~/css/StyleHome.css" />
+    
+</head>
     Layout = "_LayoutOng";
 }

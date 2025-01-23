@@ -23,10 +23,10 @@
                 </button>
                 <!--NAVBAR ITEM-->
                 <div id="navAs" class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
-                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Usuarios" asp-action="LoginPage">Login</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Usuarios" asp-action="ongVol">Cadastro</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-controller="Usuarios" asp-action="SobreNos">Sobre Nós</a></li>
+                    <ul class="navbar-nav flex-grow-1 d-flex justify-content-end pr-4">
+                        <li id="navAs" class="nav-item"><a class="nav-link text-dark" asp-controller="Usuarios" asp-action="LoginPage">Login</a></li>
+                        <li id="navAs" class="nav-item"><a class="nav-link text-dark" asp-controller="Usuarios" asp-action="ongVol">@language.GetKey("Register")</a></li>
+                        <li id="navAs" class="nav-item"><a class="nav-link text-dark" asp-controller="Usuarios" asp-action="SobreNos">@language.GetKey("About")</a></li>
                     </ul>
                 </div>
                 <!-- END OF NAVBAR ITEM-->

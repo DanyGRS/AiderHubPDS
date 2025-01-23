@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -57,7 +58,7 @@ namespace AiderHubAtual.Models
 
         [Column("tipo")]
         public string Tipo { get; set; }
-
+        public string CnpjFormatado => string.IsNullOrEmpty(Cnpj.Replace('.',' ')) ? "" : Convert.ToUInt64(Cnpj).ToString("00\\.000\\.000/0000-00");
         public Ong() { }
 
         public Ong(int id_ong, string razao_social, string nome_fantasia, string cnpj, string email, string senha, byte[] assinatura_digital, string telefone, string endereco, string cep, string numero, string uf, string cidade, string complemento, string bairro, string foto_logo, string tipo)

@@ -8,9 +8,9 @@ using OfficeOpenXml;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.Generic;
-using Excel = Microsoft.Office.Interop.Excel;
+//using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
-using Microsoft.Office.Interop.Excel;
+//using Microsoft.Office.Interop.Excel;
 
 namespace AiderHubAtual.Controllers
 {
@@ -134,7 +134,7 @@ namespace AiderHubAtual.Controllers
             var dadosEvento = _context.Eventos
                 .FirstOrDefault(e => e.id_Evento == id);
 
-            _context.Attach(evento);
+            //_context.Attach(evento);
 
             if (ModelState.IsValid)
             {
@@ -145,7 +145,7 @@ namespace AiderHubAtual.Controllers
                     // Obtenha a data atual
                     var dataAtual = DateTime.Now;
                     var dataEvento = dadosEvento.Data_Evento.Date + dadosEvento.Hora_Evento;
-                    
+
                     // Verifique se a data do evento está dentro do prazo de dois dias antes do evento
                     if (dataEvento.AddDays(-2) >= dataAtual)
                     {
@@ -250,8 +250,8 @@ namespace AiderHubAtual.Controllers
             if (existingInscricao != null)
             {
                 // Já existe uma inscrição com os mesmos valores, faça o tratamento necessário
-                ViewBag.Mensagem = "Você já está inscrito.";
-                return View("Inscricao"); // Redireciona para a página desejada
+                ViewBag.resultado = "Você já está inscrito.";
+                return RedirectToAction("Validar", "Home", new { result = ViewBag.resultado });
             }
 
             Inscricao inscricao = new Inscricao
@@ -269,13 +269,12 @@ namespace AiderHubAtual.Controllers
             //    InscricaoId = inscricao.InscricaoId
             //};
 
-           var inscricaoController = new InscricoesController(_context);
+            var inscricaoController = new InscricoesController(_context);
             await inscricaoController.Create(inscricao);
             // Faça o processamento necessário com a inscrição
 
-            ViewBag.Mensagem = "Inscrição Confirmada";
-
-            return View("Inscricao");
+            ViewBag.resultado = "Inscrição Confirmada";
+            return RedirectToAction("Validar", "Home", new { result = ViewBag.resultado });
         }
 
         public async Task<IActionResult> Encerrar(int? id)
@@ -322,7 +321,7 @@ namespace AiderHubAtual.Controllers
                 .Where(v => voluntariosInscritos.Contains(v.Id)) // Filtrar voluntários inscritos
                 .ToList();
 
-            EnviaDados(voluntariosComparecimento, idEvento);
+            //EnviaDados(voluntariosComparecimento, idEvento);
 
             return voluntariosComparecimento; // retornou os voluntarios que confirmaram a incricao
         }
@@ -354,39 +353,39 @@ namespace AiderHubAtual.Controllers
         //Metodo para limpar o excel
         protected void LimpaExcelRel(int quantidade)
         {
-            string nomeArquivo = "MacroCertificado.xlsm";
-            string diretorioAtual = Directory.GetCurrentDirectory();
-            string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
+            //string nomeArquivo = "MacroCertificado.xlsm";
+            //string diretorioAtual = Directory.GetCurrentDirectory();
+            //string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
 
-            // Inicialize o aplicativo do Excel
-            Microsoft.Office.Interop.Excel.Application excelApp = new Excel.Application();
-            excelApp.Visible = false; // Você pode torná-lo visível se desejar
+            //// Inicialize o aplicativo do Excel
+            //Microsoft.Office.Interop.Excel.Application excelApp = new Excel.Application();
+            //excelApp.Visible = false; // Você pode torná-lo visível se desejar
 
-            // Abra o arquivo Excel
-            Excel.Workbook workbook = excelApp.Workbooks.Open(caminho);
+            //// Abra o arquivo Excel
+            //Excel.Workbook workbook = excelApp.Workbooks.Open(caminho);
 
-            // Acesse a primeira planilha (índice 1)
-            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[1];
+            //// Acesse a primeira planilha (índice 1)
+            //Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets[1];
 
-            int maxRows = 2; // Número máximo de linhas
-            int maxColumns = quantidade; // Número máximo de colunas (coluna J é a 10ª)
+            //int maxRows = 2; // Número máximo de linhas
+            //int maxColumns = quantidade; // Número máximo de colunas (coluna J é a 10ª)
 
-            // Limpar o conteúdo das células até a coluna J e 15 linhas
-            for (int row = 1; row <= maxRows; row++) // verifique se apaga os cabeçalhos
-            {
-                for (int col = 1; col <= maxColumns; col++)
-                {
-                    ((Excel.Range)worksheet.Cells[row, col]).ClearContents();
-                }
-            }
+            //// Limpar o conteúdo das células até a coluna J e 15 linhas
+            //for (int row = 1; row <= maxRows; row++) // verifique se apaga os cabeçalhos
+            //{
+            //    for (int col = 1; col <= maxColumns; col++)
+            //    {
+            //        ((Excel.Range)worksheet.Cells[row, col]).ClearContents();
+            //    }
+            //}
 
-            // Salvar e fechar o arquivo Excel
-            workbook.Save();
-            workbook.Close();
-            excelApp.Quit();
+            //// Salvar e fechar o arquivo Excel
+            //workbook.Save();
+            //workbook.Close();
+            //excelApp.Quit();
 
-            Marshal.ReleaseComObject(workbook);
-            Marshal.ReleaseComObject(excelApp);
+            //Marshal.ReleaseComObject(workbook);
+            //Marshal.ReleaseComObject(excelApp);
 
 
         }
@@ -395,81 +394,89 @@ namespace AiderHubAtual.Controllers
         {
             // Salve o arquivo Excel
             // Salve o arquivo Excel
-            string nomeArquivo = "MacroCertificado.xlsm";
-            string diretorioAtual = Directory.GetCurrentDirectory();
-            string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
+            //string nomeArquivo = "MacroCertificado.xlsm";
+            //string diretorioAtual = Directory.GetCurrentDirectory();
+            //string caminho = Path.Combine(diretorioAtual, "Relatorio", nomeArquivo);
 
-            // Inicialize o aplicativo do Excel
-            Excel.Application excelApp = new Excel.Application();
-            excelApp.Visible = false;
+            //// Inicialize o aplicativo do Excel
+            //Excel.Application excelApp = new Excel.Application();
+            //excelApp.Visible = false;
 
-            Excel.Workbook workbook = excelApp.Workbooks.Open(caminho);
+            //Excel.Workbook workbook = excelApp.Workbooks.Open(caminho);
 
-            // Obtenha a planilha existente pelo nome
-            Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets["relatorio"];
+            //// Obtenha a planilha existente pelo nome
+            //Excel.Worksheet worksheet = (Excel.Worksheet)workbook.Sheets["relatorio"];
 
-            worksheet.Cells[1, 1].Value = "nome_voluntario";
-            worksheet.Cells[1, 2].Value = "nome_ong";
-            worksheet.Cells[1, 3].Value = "data_evento";
-            worksheet.Cells[1, 4].Value = "carga_horaria";
-            worksheet.Cells[1, 5].Value = "email";
+            //worksheet.Cells[1, 1].Value = "nome_voluntario";
+            //worksheet.Cells[1, 2].Value = "nome_ong";
+            //worksheet.Cells[1, 3].Value = "data_evento";
+            //worksheet.Cells[1, 4].Value = "carga_horaria";
+            //worksheet.Cells[1, 5].Value = "email";
 
-            // Adicione os dados aos campos correspondentes
-            int linha = 2; // Começa na linha 2 após os cabeçalhos
-            foreach (var relatorio in relatorios)
-            {
-                worksheet.Cells[linha, 1].Value = relatorio.NomeVoluntario;
-                worksheet.Cells[linha, 2].Value = relatorio.NomeONG;
-                worksheet.Cells[linha, 3].Value = relatorio.DataEvento;
-                worksheet.Cells[linha, 4].Value = relatorio.CargaHoraria.Hours;//arrumar o tipo de dado da carga horaria
-                worksheet.Cells[linha, 5].Value = relatorio.Email;//arrumar o tipo de dado da carga horaria
-                linha++;
-            }
+            //// Adicione os dados aos campos correspondentes
+            //int linha = 2; // Começa na linha 2 após os cabeçalhos
+            //foreach (var relatorio in relatorios)
+            //{
+            //    worksheet.Cells[linha, 1].Value = relatorio.NomeVoluntario;
+            //    worksheet.Cells[linha, 2].Value = relatorio.NomeONG;
+            //    worksheet.Cells[linha, 3].Value = relatorio.DataEvento;
+            //    worksheet.Cells[linha, 4].Value = relatorio.CargaHoraria.Hours;//arrumar o tipo de dado da carga horaria
+            //    worksheet.Cells[linha, 5].Value = relatorio.Email;//arrumar o tipo de dado da carga horaria
+            //    linha++;
+            //}
 
-            // Salve o arquivo Excel
-            workbook.Save();
-            workbook.Close();
-            // Feche o aplicativo do Excel
-            excelApp.Quit();
+            //// Salve o arquivo Excel
+            //workbook.Save();
+            //workbook.Close();
+            //// Feche o aplicativo do Excel
+            //excelApp.Quit();
 
-            // Libere os objetos COM
-            Marshal.ReleaseComObject(worksheet);
-            Marshal.ReleaseComObject(workbook);
-            Marshal.ReleaseComObject(excelApp);
+            //// Libere os objetos COM
+            //Marshal.ReleaseComObject(worksheet);
+            //Marshal.ReleaseComObject(workbook);
+            //Marshal.ReleaseComObject(excelApp);
 
-            GeraCertificados(caminho);
+            //GeraCertificados(caminho);
         }
 
         protected void GeraCertificados(string caminho)
         {
-            Application xlApp = new Application();
+            //Application xlApp = new Application();
 
-            if (xlApp == null)
-            {
-                ViewBag.Mensagem = "Erro ao executar a macro: aplicativo Excel não encontrado.";
-                //return View("Relatorio");
-            }
+            //if (xlApp == null)
+            //{
+            //    ViewBag.Mensagem = "Erro ao executar a macro: aplicativo Excel não encontrado.";
+            //    //return View("Relatorio");
+            //}
 
-            Workbook xlWorkbook = xlApp.Workbooks.Open(caminho, ReadOnly: false);
+            //Workbook xlWorkbook = xlApp.Workbooks.Open(caminho, ReadOnly: false);
 
-            try
-            {
-                xlApp.Visible = false;
-                xlApp.Run("GerarCertificado");
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Mensagem = "Erro ao executar a macro.";
-                //return View("Relatorio");
-            }
+            //try
+            //{
+            //    xlApp.Visible = false;
+            //    xlApp.Run("GerarCertificado");
+            //}
+            //catch (Exception ex)
+            //{
+            //    ViewBag.Mensagem = "Erro ao executar a macro.";
+            //    //return View("Relatorio");
+            //}
 
-            xlWorkbook.Close(false);
-            xlApp.Application.Quit();
-            xlApp.Quit();
+            //xlWorkbook.Close(false);
+            //xlApp.Application.Quit();
+            //xlApp.Quit();
 
 
-            ViewBag.Mensagem = "Arquivo gerado com sucesso!";
+            //ViewBag.Mensagem = "Arquivo gerado com sucesso!";
+            
             //return View("Relatorio");
         }
+        [HttpGet]
+        public IActionResult GetEvents()
+        {
+            var events = _context.Eventos.Select(e => new { id = e.id_Evento, title = e.Titulo, start = e.Data_Evento.ToString("yyyy-MM-dd"), address = e.Bairro });
+            return Json(events);
+        }
     }
+
 }

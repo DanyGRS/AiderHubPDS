@@ -2,8 +2,31 @@
     Layout = "_LayoutVoluntario";
 }
 
-@if (ViewBag.Mensagem != null)
-{
-    <div>@ViewBag.Mensagem</div>
-}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AiderHub</title>
+    <link rel="stylesheet" href="~/css/resultstyle.css" />
 
+</head>
+
+<body>
+
+    <div class="content">
+        @if (ViewBag.Mensagem != null)
+        {
+        <div>
+            <h1>@ViewBag.Mensagem</h1>
+        </div>
+        }
+    </div>
+    <div class="imgBox2">
+        <img src="~/inscrita.png">
+    </div>
+    <div class="circle"></div>
+
+    <div class="text-center mt-5 mb-5">
+        <a class="btn btn-primary btn-white btn-lg" asp-controller="Inscricoes" asp-action="Index">Fechar</a>
+    </div>
+
+</body>

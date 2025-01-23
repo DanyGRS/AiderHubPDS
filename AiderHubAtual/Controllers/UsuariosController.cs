@@ -10,10 +10,12 @@ namespace AiderHubAtual.Controllers
     public class UsuariosController : Controller
     {
         private readonly Context _context;
+        private readonly PasswordHasherService _password;
 
-        public UsuariosController(Context context)
+        public UsuariosController(Context context, PasswordHasherService password)
         {
             _context = context;
+            _password = password;
         }
 
         // GET: Usuarios
@@ -40,15 +42,11 @@ namespace AiderHubAtual.Controllers
             return View(usuario);
         }
 
-        // GET: Usuarios/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Usuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Email,Senha,Status,Tipo")] Usuario usuario)
@@ -62,7 +60,6 @@ namespace AiderHubAtual.Controllers
             return View(usuario);
         }
 
-        // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,9 +75,6 @@ namespace AiderHubAtual.Controllers
             return View(usuario);
         }
 
-        // POST: Usuarios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Senha,Status,Tipo")] Usuario usuario)
@@ -112,8 +106,6 @@ namespace AiderHubAtual.Controllers
             }
             return View(usuario);
         }
-
-        // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,7 +123,6 @@ namespace AiderHubAtual.Controllers
             return View(usuario);
         }
 
-        // POST: Usuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -151,12 +142,10 @@ namespace AiderHubAtual.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string email, string senha)
         {
-            // Verificar se o email e a senha estão corretos
             bool loginValido = VerificarCredenciais(email, senha);
 
             if (loginValido)
             {
-                // Login bem-sucedido, redirecionar para a página principal
                 int userId = ObterUserId(email);
                 string userTipo = ObterTipo(email);
                 HttpContext.Session.SetInt32("IdUser", userId);
@@ -165,7 +154,6 @@ namespace AiderHubAtual.Controllers
             }
             else
             {
-                // Credenciais inválidas, exibir mensagem de erro
                 ModelState.AddModelError(string.Empty, "Email ou senha inválidos");
                 ViewBag.Mensagem = "Senha ou Email estão invalidos";
                 return View("LoginPage");
@@ -174,48 +162,32 @@ namespace AiderHubAtual.Controllers
 
         private bool VerificarCredenciais(string email, string senha)
         {
-            // Buscar o registro de usuário com o email informado
             Usuario usuario = _context.Usuarios.FirstOrDefault(u => u.Email == email);
 
-            if (usuario != null)
-            {
-                // Verificar se a senha fornecida corresponde à senha do usuário
-                if (usuario.Senha == senha)
-                {
-                    // Credenciais válidas
-                    return true;
-                }
-            }
-
-            // Credenciais inválidas
-            return false;
+            var senhaDescriptografada = _password.VerifyPassword(usuario.Senha, senha);
+            return senhaDescriptografada;
         }
 
         private int ObterUserId(string email)
         {
-            // Buscar o registro de usuário com o email informado
             Usuario usuario = _context.Usuarios.FirstOrDefault(u => u.Email == email);
 
             if (usuario != null)
             {
-                // Retornar o userId
                 return usuario.Id;
             }
 
-            return 0; // ou outro valor indicando que o userId não foi encontrado
+            return 0;
         }
         private string ObterTipo(string email)
         {
-            // Buscar o registro de usuário com o email informado
             Usuario usuario = _context.Usuarios.FirstOrDefault(u => u.Email == email);
 
             if (usuario != null)
             {
-                // Retornar o userId
                 return usuario.Tipo;
             }
-
-            return " "; // ou outro valor indicando que o userId não foi encontrado
+            return " ";
         }
 
         public IActionResult PaginaInicial()

@@ -9,10 +9,12 @@ namespace AiderHubAtual.Controllers
     public class OngsController : Controller
     {
         private readonly Context _context;
+        private readonly PasswordHasherService _passwordHasher;
 
-        public OngsController(Context context)
+        public OngsController(Context context, PasswordHasherService password)
         {
             _context = context;
+            _passwordHasher = password;
         }
 
         // GET: Ongs
@@ -67,16 +69,18 @@ namespace AiderHubAtual.Controllers
                 _context.Add(ong);
                 await _context.SaveChangesAsync();
 
+                var senhaCriptografada = _passwordHasher.HashPassword(ong.Senha);
+
                 Usuario usuario = new Usuario
                 {
                     Id = ong.Id,
                     Email = ong.Email,
-                    Senha = ong.Senha,
+                    Senha = senhaCriptografada,
                     Tipo = "O",
                     Status = true
                 };
 
-                var usuarioController = new UsuariosController(_context);
+                var usuarioController = new UsuariosController(_context, _passwordHasher);
                 await usuarioController.Create(usuario);
 
                 return RedirectToAction("Inicial", "Home");

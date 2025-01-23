@@ -65,6 +65,8 @@ namespace AiderHubAtual.Models
         [Column("tipo")]
         public string Tipo { get; set; }
 
+        public string CpfFormatado => string.IsNullOrEmpty(Cpf) ? "" : Convert.ToUInt64(Cpf).ToString(@"000\.###\.###-##");
+        public string DataNascimentoFormatada => DataNascimento.ToString("dd/MM/yyyy");
         public Voluntario() { }
 
         public Voluntario(int id_voluntario, string nome, string foto_logo, DateTime data_nascimento, string cpf, string email, string senha, string telefone, string endereco, string cep, string numero, string uf, string cidade, string bairro, string complemento, string formacao, string sobre, string interesses, string tipo)

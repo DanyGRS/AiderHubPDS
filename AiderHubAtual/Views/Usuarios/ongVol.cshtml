@@ -1,13 +1,15 @@
-﻿
-
+﻿@{ 
+    Layout = "_LayoutLogin";
+}
 <head>
-    <link rel="stylesheet" href="~/css/StyleHome.css" />
+    
+    <link rel="stylesheet" href="~/css/StyleBranco.css" />
 </head>
     <body>
         <div class="header">
             <div class="text-center">
                 @*<h1>Cadastre-se</h1>*@
-                <h1>Escolha seu perfil: </h1>
+                <h1 style="color: #1b3061">Escolha seu perfil: </h1>
                 <hr />
             </div>
         </div>
@@ -16,7 +18,7 @@
             <div class="col-md-6">
                 <a asp-area="" asp-controller="Ongs" asp-action="Create" class="card-link text-white">
                     <div class="card border-white" style="width: 20rem; background-color: #FF7E0D;">
-                        <img src="~/ong2.png" class="card-img-top" alt="...">
+                        <img src="~/ong3.png" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h4 class="card-text">ONG</h4>
                             <p>
@@ -48,12 +50,11 @@
                 </a>
             </div>
         </div>
-
-
     </body>
     <style>
         .card-img-top {
             width: 100%; /* Garante que a imagem preencha todo o espaço do card */
+            height: 12rem;
             max-height: 100%; /* Evita que a imagem saia do card */
             filter: blur(2px);  /*Aplica um desfoque inicial */
             transition: filter 0.3s ease;  /*Transição suave para o efeito de desfoque*/ 

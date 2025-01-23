@@ -5,8 +5,9 @@
     Layout = "_LayoutVoluntario";
 }
 
+
 <head>
-    <link rel="stylesheet" href="~/css/StyleEvento.css" />
+    <link rel="stylesheet" href="~/css/StyleHome.css" />
 </head>
 
 <body>
@@ -23,20 +24,33 @@
     <div class="card-container">
         @foreach (var item in Model)
         {
+
+            DateTime currentDate = DateTime.Now;
+            bool showCheckInButton = @item.EventosInscricoes.FirstOrDefault().evento.Data_Evento.ToString("D") == currentDate.ToString("D");
+            bool showUnsubscribeButton = @item.EventosInscricoes.FirstOrDefault().evento.Status == true;
+
             <br>
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">@item.EventosInscricoes.FirstOrDefault().evento.Titulo</h5>
                     <p class="card-text">@language.GetKey("Date"): @item.EventosInscricoes.FirstOrDefault().evento.Data_Evento.ToString("D")</p>
                     <p class="card-text">@language.GetKey("Hour"): @item.EventosInscricoes.FirstOrDefault().evento.Hora_Evento</p>
-                    <p class="card-text">Confirmação: @(item.Confirmacao ? "Sim" : "Não")</p>
+                    <p class="card-text">@language.GetKey("Confirmed"): @(item.Confirmacao ? "Sim" : "Não")</p>
                     <div class="row">
-                        <a asp-action="Details" asp-route-id="@item.InscricaoId" class="btn btn-primary btn-sm">@language.GetKey("Details") </a>
-                        <a asp-action="DeletarInscricao" asp-route-id="@item.InscricaoId" class="btn btn-danger btn-sm">@language.GetKey("Unsubscribe")</a>
-                        <form class="checkInForm" method="post">
-                            <input type="hidden" name="id_Evento" value="@item.id_Evento" />
-                            <button type="submit" class="btn btn-success btn-sm">Check-In</button>
-                        </form>
+                        <a asp-action="Details" asp-route-id="@item.InscricaoId" class="btn btn-primary btn-sm">@language.GetKey("Details")</a>
+
+                        @if (showUnsubscribeButton)
+                        {
+                            <a asp-action="DeletarInscricao" asp-route-id="@item.InscricaoId" class="btn btn-danger btn-sm">@language.GetKey("Unsubscribe")</a>
+
+                        }
+                        @if (showCheckInButton && showUnsubscribeButton)
+                        {
+                            <form class="checkInForm" method="post">
+                                <input type="hidden" name="id_Evento" value="@item.id_Evento" />
+                                <button type="submit" class="btn btn-success btn-sm">Check-In</button>
+                            </form>
+                        }
                     </div>
                 </div>
             </div>
@@ -51,7 +65,6 @@
     for (var i = 0; i < forms.length; i++) {
         forms[i].addEventListener("submit", function (event) {
             event.preventDefault(); // Prevent the default form submission
-            
             getLocation(this); // Pass the current form as an argument
         });
     }
@@ -69,7 +82,6 @@
     function sendPosition(form, position) {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
-
         var id_Evento = form.querySelector("input[name='id_Evento']").value;
         // Fazer uma solicitação Ajax para obter o endereço com base no id_Evento
         $.ajax({

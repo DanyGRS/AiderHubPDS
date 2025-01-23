@@ -17,14 +17,13 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                    <ul class="navbar-nav flex-grow-1 d-flex justify-content-end pr-4">
+                        <li id="navAs" class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Inscricoes" asp-action="Index">@language.GetKey("My Subscriptions")</a>
                         </li>
-                        <li class="nav-item">
+                        <li id="navAs" class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Eventos" asp-action="Index">@language.GetKey("Events")</a>
                         </li>
-
                     </ul>
                     <!-- Language Dropdown -->
                     <div class="dropdown">
@@ -35,6 +34,13 @@
                             <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="pt-BR" class="dropdown-item" onclick="changeLanguage('pt-BR', 'Português')">Português</a>
                             <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="en-US" class="dropdown-item" onclick="changeLanguage('en-US', 'Inglês')">English</a>
                         </div>
+                    </div>
+                    <div class="pl-3">
+                        <a asp-controller="Home" asp-action="Detalhes">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#FF7E0D" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
+                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm4.5 0a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5 2.755C12.146 12.825 10.623 12 8 12s-4.146.826-5 1.755V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.245z" />
+                            </svg>
+                        </a>
                     </div>
                     <!-- End Language Dropdown -->
                     <div class="nav-item">
@@ -52,12 +58,13 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container" style="font-weight: bold; ">
-            &copy; 2023 - AiderHub - <a asp-area="" asp-controller="Home" asp-action="Privacy" >@language.GetKey("Privacy")</a>
+    <footer class="footer text-muted">
+        <div class="container">
+            &copy; 2023 - AiderHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">@language.GetKey("Privacy")</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
@@ -98,6 +105,8 @@
 
         // Call getSelectedLanguage when the page loads to set the initial button text and color
         window.onload = getSelectedLanguage;
+
+       
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
@@ -105,8 +114,24 @@
 
 
 <style>
+    .footer {
+        flex-shrink: 0;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        border-top: 1px solid #dee2e6;
+        text-align: center;
+        padding: 10px 0;
+    }
+
     .botaoSair {
         margin-left: 15px;
+    }
+
+    #navAs a:hover {
+        background-color: #FC7828;
+        padding: 4px 8px 4px 8px;
+        border: 2px solid orange;
+        border-radius: 10px;
     }
 </style>
 

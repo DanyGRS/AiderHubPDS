@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AiderHubAtual.Controllers
 {
@@ -32,8 +31,10 @@ namespace AiderHubAtual.Controllers
 
             return RedirectToAction("LoginPage", "Usuarios");
         }
-        public ActionResult Index(int id, string tipo)
+        public IActionResult Index(int id, string tipo)
         {
+            //var eventos = _context.Eventos.ToList();
+
             Usuario usuario = _context.Usuarios.FirstOrDefault(u => u.Id == id && u.Tipo == tipo);
 
             if (usuario.Tipo == "V")
@@ -47,6 +48,35 @@ namespace AiderHubAtual.Controllers
                 bool voluntarioLogado = false;
                 ViewBag.VoluntarioLogado = voluntarioLogado;
             }
+            return View();
+        }
+
+        public ActionResult Detalhes()
+        {
+            int? idUser = HttpContext.Session.GetInt32("IdUser");
+
+            if (idUser.HasValue)
+            {
+                // Redirecionar para a action Details da controller Voluntario
+                return RedirectToAction("Details", "Voluntarios", new { id = idUser.Value });
+            }
+
+            // Lógica adicional se necessário para caso idUser seja nulo
+
+            return View();
+        }
+        public ActionResult DetalhesOng()
+        {
+            int? idUser = HttpContext.Session.GetInt32("IdUser");
+
+            if (idUser.HasValue)
+            {
+                // Redirecionar para a action Details da controller Voluntario
+                return RedirectToAction("Details", "Ongs", new { id = idUser.Value });
+            }
+
+            // Lógica adicional se necessário para caso idUser seja nulo
+
             return View();
         }
 
@@ -87,8 +117,8 @@ namespace AiderHubAtual.Controllers
 
             if (coordinates != null)
             {
-                ViewBag.Latitude = coordinates.Latitude;
-                ViewBag.Longitude = coordinates.Longitude;
+                ViewBag.Latitude = /*"-23.487889"*/coordinates.Latitude;
+                ViewBag.Longitude = /*"-46.491426";*/ coordinates.Longitude;
 
                 return RedirectToAction("Resultado", new
                 {
@@ -103,10 +133,11 @@ namespace AiderHubAtual.Controllers
             }
             else
             {
-                // não achou / deu erro
-                ViewBag.ErrorMessage = "Não foi possivel realizar check-in";
+                ViewBag.resultado = "CHECK-IN INVÁLIDO!";
+                ViewBag.resultados = "Tente novamente quando estiver no local do evento";
+
+                return RedirectToAction("Invalido", new { result = ViewBag.resultado, results = ViewBag.resultados });
             }
-            return View();
         }
 
         [HttpPost]
@@ -133,11 +164,10 @@ namespace AiderHubAtual.Controllers
 
             double distanceInMeters = CalculateDistance(parsedDeviceLatitude, parsedDeviceLongitude, parsedDataBaselatitude, parsedDataBaselongitude);
 
-            if (distanceInMeters <= 4000)
+            if (distanceInMeters <= 34000)
             {
-                ViewBag.resultado = "DENTRO DO RAIO, CHECK-IN REALIZADO COM SUCESSO!";
-                //ViewBag.coordenadas = $"{parsedDeviceLatitude}, {parsedDeviceLongitude}";
-                //ViewBag.distancia = distanceInMeters;
+                ViewBag.resultado = "Check-In Confirmado!";
+                ViewBag.resultados = "O seu check-in para o evento foi realizado com sucesso.";
 
                 var inscricao = _context.Inscricoes.FirstOrDefault(i => i.id_Evento == id_Evento && i.id_Voluntario == idUser);
 
@@ -146,7 +176,7 @@ namespace AiderHubAtual.Controllers
                     if (inscricao.Confirmacao == true)
                     {
                         ViewBag.Mensagem = "Você já fez check-in nesse evento!";
-                        return RedirectToAction("Inscricao", "Eventos", new { result = ViewBag.Mensagem });
+                        return RedirectToAction("Validar", new { result = ViewBag.resultado, results = ViewBag.resultados });
                     }
                     else
                     {
@@ -155,22 +185,29 @@ namespace AiderHubAtual.Controllers
                     }
                 }
 
-                return RedirectToAction("Validar", new { result = ViewBag.resultado});
+                return RedirectToAction("Validar", new { result = ViewBag.resultado });
             }
             else
             {
-                ViewBag.resultado = "FORA DO RAIO, CHECK-IN INVÁLIDO!";
+                ViewBag.resultado = "CHECK-IN INVÁLIDO!";
                 ViewBag.resultados = "Tente novamente quando estiver no local do evento";
 
-                return RedirectToAction("Validar", new { result = ViewBag.resultado, results = ViewBag.resultados }) ;
+                return RedirectToAction("Invalido", new { result = ViewBag.resultado, results = ViewBag.resultados });
             }
         }
 
-        public ActionResult Validar(string result, string coordinate, double distance)
+        public ActionResult Validar(string result, string results)
         {
             ViewBag.Result = result;
-            ViewBag.Coordinate = coordinate;
-            ViewBag.Distance = distance;
+            ViewBag.Results = results;
+
+            return View();
+        }
+
+        public ActionResult Invalido(string result, string results)
+        {
+            ViewBag.Result = result;
+            ViewBag.Results = results;
             return View();
         }
 

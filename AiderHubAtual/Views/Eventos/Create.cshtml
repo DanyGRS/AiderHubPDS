@@ -6,10 +6,13 @@
     Layout = "_LayoutOng";
 }
 
-
-
 <head>
     <link rel="stylesheet" href="~/css/StyleHome.css" />
+    <style>
+        body {
+            background-color: #EC7208;
+        }
+    </style>
 </head>
 <body>
     <form method="post">
@@ -23,24 +26,24 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Descricao" class="control-label"></label>
-                    <input asp-for="Descricao" class="form-control" required/,>
+                    <input asp-for="Descricao" class="form-control" required /,>
                     <span asp-validation-for="Descricao" class="text-danger"></span>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-5">
                         <label asp-for="Data_Evento" class="control-label"></label>
-                        <input asp-for="Data_Evento" class="form-control" type="date" required/>
+                        <input asp-for="Data_Evento" class="form-control" type="date" required />
                         <span asp-validation-for="Data_Evento" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-5">
                         <label asp-for="Hora_Evento" class="control-label"></label>
-                        <input asp-for="Hora_Evento" class="form-control" type="time" required/>
+                        <input asp-for="Hora_Evento" class="form-control" type="time" required />
                         <span asp-validation-for="Hora_Evento" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="Carga_Horaria" class="control-label"></label>
-                    <input asp-for="Carga_Horaria" class="form-control" type="time" required/>
+                    <input asp-for="Carga_Horaria" class="form-control" type="time" required />
                     <span asp-validation-for="Carga_Horaria" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -54,69 +57,40 @@
 
                     <div class="form-group  col-md-9">
                         <label asp-for="Logradouro" class="control-label"></label>
-                        <input asp-for="Logradouro" class="form-control" required/>
+                        <input asp-for="Logradouro" id="logradouro" class="form-control" required />
                         <span asp-validation-for="Logradouro" class="text-danger"></span>
                     </div>
                     <div class="form-group  col-md-3">
                         <label asp-for="Numero" class="control-label"></label>
-                        <input asp-for="Numero" class="form-control"required />
+                        <input asp-for="Numero" id="numero" class="form-control" required />
                         <span asp-validation-for="Numero" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="CEP" class="control-label"></label>
-                    <input asp-for="CEP" class="form-control" required/>
+                    <input asp-for="CEP" id="cep" class="form-control" required placeholder="Ex: 00000-000" />
                     <span asp-validation-for="CEP" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Complemento" class="control-label"></label>
-                    <input asp-for="Complemento" class="form-control" />
+                    <input asp-for="Complemento" id="complemento" class="form-control" />
                     <span asp-validation-for="Complemento" class="text-danger"></span>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-8">
                         <label asp-for="Cidade" class="control-label"></label>
-                        <input asp-for="Cidade" class="form-control" required/>
+                        <input asp-for="Cidade" id="cidade" class="form-control" required />
                         <span asp-validation-for="Cidade" class="text-white"></span>
                     </div>
                     <div class="form-group col-md-2">
                         <label asp-for="UF" class="control-label"></label>
-                        <select asp-for="UF" class="form-control dropdown" size="1" required>
-                            <option value="">---</option>
-                            <option value="AC">AC</option>
-                            <option value="AL">AL</option>
-                            <option value="AP">AP</option>
-                            <option value="AM">AM</option>
-                            <option value="BA">BA</option>
-                            <option value="CE">CE</option>
-                            <option value="DF">DF</option>
-                            <option value="ES">ES</option>
-                            <option value="GO">GO</option>
-                            <option value="MA">MA</option>
-                            <option value="MT">MT</option>
-                            <option value="MS">MS</option>
-                            <option value="MG">MG</option>
-                            <option value="PA">PA</option>
-                            <option value="PB">PB</option>
-                            <option value="PR">PR</option>
-                            <option value="PE">PE</option>
-                            <option value="PI">PI</option>
-                            <option value="RJ">RJ</option>
-                            <option value="RN">RN</option>
-                            <option value="RS">RS</option>
-                            <option value="RO">RO</option>
-                            <option value="RR">RR</option>
-                            <option value="SC">SC</option>
-                            <option value="SP">SP</option>
-                            <option value="SE">SE</option>
-                            <option value="TO">TO</option>
-                        </select>
+                        <input asp-for="UF" id="uf" class="form-control" size="2" required/>
                         <span asp-validation-for="UF" class="text-white"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="Bairro" class="control-label"></label>
-                    <input asp-for="Bairro" class="form-control" />
+                    <input asp-for="Bairro" id="bairro" class="form-control" />
                     <span asp-validation-for="Bairro" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -125,5 +99,6 @@
             </div>
         </div>
     </form>
-
 </body>
+
+<script type="text/javascript" src="~/js/preencherCEP.js"></script>

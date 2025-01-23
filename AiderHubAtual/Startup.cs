@@ -29,6 +29,7 @@ namespace AiderHubAtual
 
             services.AddSingleton<LanguageService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddScoped<PasswordHasherService>();
 
             services.AddMvc()
                 .AddViewLocalization()
@@ -104,7 +105,7 @@ namespace AiderHubAtual
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Usuarios}/{action=LoginPage}/{id?}");
+                    pattern: "{controller=Usuarios}/{action=PaginaInicial}/{id?}");
             });
         }
 

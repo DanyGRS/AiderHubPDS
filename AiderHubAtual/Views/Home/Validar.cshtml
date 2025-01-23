@@ -1,19 +1,30 @@
 ﻿@{
     ViewData["Title"] = "Validação";
-    Layout = "_LayoutVoluntario";
+    Layout = "_LayoutLogin";
 }
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AiderHub</title>
-    <link rel="stylesheet" href="~/css/StyleVon.css" />
+    <link rel="stylesheet" href="~/css/resultstyle.css" />
 
 </head>
+
 <body>
-    <div>
+
+    <div class="content">
         <h1 class="text-white text-center"> @ViewBag.Result</h1>
         <p class="text-white text-center"> @ViewBag.Results</p>
     </div>
+    <div class="imgBox">
+        <img src="~/sucesso1-removebg-preview.png">
+    </div>
+    <div class="circle"></div>
+
+    <div class="text-center mt-5 mb-5">
+        <a class="btn btn-primary btn-white btn-lg" asp-controller="Inscricoes" asp-action="Index">Fechar</a>
+    </div>
+
+
 </body>
-@*<p>Coordenadas: @ViewBag.Coordinate</p>
-    <p>Distancia: @ViewBag.Distance</p>*@
